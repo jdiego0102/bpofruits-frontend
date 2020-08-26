@@ -1,1 +1,32 @@
-<p>sidebar works!</p>
+<mat-nav-list>
+  <div class="profile-card">
+    <div class="header">
+      <div class="header">
+        <h2>Nombre de usuario</h2>
+        <h4>Nombre actor</h4>
+      </div>
+      <img src="assets/img/fruta.png" alt="Image">
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader>Páginas</h2>
+
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/">Dashboard</a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/predio">Predio</a>
+
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader>Ajustes</h2>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/">
+    <mat-icon>import_contacts</mat-icon>
+    Usuarios
+  </a>
+
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/">
+    <mat-icon>calendar_today</mat-icon>
+    Fecha
+  </a>
+
+</mat-nav-list>
