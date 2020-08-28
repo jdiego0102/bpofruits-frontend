@@ -5,17 +5,10 @@ import { DashboardComponent } from '../../modules/dashboard/dashboard.component'
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { PredioComponent } from '../../modules/predio/predio.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatDividerModule } from '@angular/material/divider';
+import { MatModule } from '../../mat/mat.module';
 
 @NgModule({
   declarations: [DefaultComponent, DashboardComponent, PredioComponent],
-  imports: [
-    CommonModule,
-    RouterModule,
-    SharedModule,
-    MatSidenavModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, RouterModule, SharedModule, MatModule],
 })
 export class DefaultModule {}

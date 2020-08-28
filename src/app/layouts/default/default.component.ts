@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-default',
@@ -7,9 +8,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class DefaultComponent implements OnInit {
   sideBarOpen = true;
-  constructor() {}
+  isLogged: boolean = false;
+  constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.isLogged.subscribe((res) => {
+      this.isLogged = res;
+    });
+  }
 
   sideBarToggler() {
     this.sideBarOpen = !this.sideBarOpen;

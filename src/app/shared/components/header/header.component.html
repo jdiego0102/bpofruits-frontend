@@ -1,34 +1,55 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="app-header">
   <mat-toolbar-row>
-    <button mat-icon-button (click)="toggleSiderBar()">
-      <mat-icon>menu</mat-icon>
+    <button *ngIf="isLogged" mat-icon-button (click)="toggleSiderBar()">
+      <mat-icon>notes</mat-icon>
     </button>
 
     <span> BPOFruits</span>
 
+    <ng-template #viewLogout>
+      <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+        <ul fxLayout="row" fxLayoutGap="20px">
+
+          <li>
+            <button mat-icon-button>
+              <mat-icon>settings</mat-icon>
+            </button>
+          </li>
+
+          <li>
+            <button mat-icon-button>
+              <mat-icon>help_outline</mat-icon>
+            </button>
+          </li>
+
+          <li>
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon>person_outline</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="onLogout()">
+                <mat-icon>exit_to_app</mat-icon>
+                Cerrar sesión
+              </button>
+            </mat-menu>
+          </li>
+
+        </ul>
+      </div>
+    </ng-template>
+
     <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
       <ul fxLayout="row" fxLayoutGap="20px">
+
         <li>
-          <button mat-icon-button>
-            <mat-icon>settings</mat-icon>
-          </button>
+          <a *ngIf="!isLogged; else viewLogout" mat-button routerLink="login" routerLinkActive="active">Iniciar
+            sesión</a>
         </li>
         <li>
-          <button mat-icon-button>
-            <mat-icon>help_outline</mat-icon>
-          </button>
+          <a *ngIf="!isLogged" mat-button mat-raised-button routerLink="register"
+            routerLinkActive="active">Regístrate</a>
         </li>
-        <li>
-          <button mat-button [matMenuTriggerFor]="menu">
-            <mat-icon>person_outline</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-              <mat-icon>exit_to_app</mat-icon>
-              Cerrar sesión
-            </button>
-          </mat-menu>
-        </li>
+
       </ul>
     </div>
 

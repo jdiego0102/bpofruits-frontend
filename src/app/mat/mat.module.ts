@@ -32,10 +32,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -77,6 +79,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatTreeModule,
     PortalModule,
     LayoutModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
   ],
   exports: [
     CommonModule,
@@ -117,6 +121,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatTreeModule,
     PortalModule,
     LayoutModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
   ],
 })
 export class MatModule {}
