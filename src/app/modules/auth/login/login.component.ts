@@ -4,6 +4,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { UserResponse } from 'src/app/models/user.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   // Controlar spinner
   isLoading: boolean = false;
   // Controlar mostrar/ocultar contraseña
-  hide = false;
+  hide = true;
   // Obtener valores del formulario
   loginForm = this.fb.group({
     name: [
@@ -32,7 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -66,13 +69,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const formValue = this.loginForm.value;
     this.subscription.add(
-      this.authService.login(formValue).subscribe((res) => {
-        if (res) {
+      this.authService.login(formValue).subscribe((res: UserResponse) => {
+        if (res.status == 'success') {
           this.router.navigate(['/']);
-          this.openSnackBar();
+          // Mostrar notificación
+          this.toastr.success('Bienvenido de nuevo...', '¡Hola!', {
+            timeOut: 7000,
+            progressBar: true,
+          });
           this.isLoading = false;
         } else {
-          console.log(this.isLoading);
+          // Mostrar notificación
+          this.toastr.error(res.msg, '¡Error!', {
+            timeOut: 7000,
+            progressBar: true,
+          });
+          this.isLoading = false;
         }
       })
     );

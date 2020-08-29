@@ -5,37 +5,74 @@
     </mat-card-header>
 
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-
       <mat-card-content>
         <mat-form-field class="full-width-input">
-          <input formControlName="name" matInput placeholder="Nombre de usuario" required>
+          <input
+            formControlName="name"
+            matInput
+            placeholder="Nombre de usuario"
+            required
+          />
           <!-- Mostrar validación de error -->
           <mat-error *ngIf="isValidField('name')">
-            {{ getErrorMessage('name') }}
+            {{ getErrorMessage("name") }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
-          <input formControlName="email" matInput placeholder="Correo" required>
+          <input
+            formControlName="email"
+            matInput
+            placeholder="Correo"
+            required
+          />
           <!-- Mostrar validación de error -->
           <mat-error *ngIf="isValidField('email')">
-            {{ getErrorMessage('email') }}
+            {{ getErrorMessage("email") }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
-          <input formControlName="password" matInput placeholder="Contraseña" required>
+          <input
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+            matInput
+            placeholder="Contraseña"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }} </mat-icon>
+          </button>
           <!-- Mostrar validación de error -->
           <mat-error *ngIf="isValidField('password')">
-            {{ getErrorMessage('password') }}
+            {{ getErrorMessage("password") }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
-          <input formControlName="confirmPassword" matInput placeholder="Confirmar contraseña" required>
+          <input
+            [type]="hide ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            matInput
+            placeholder="Confirmar contraseña"
+            required
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }} </mat-icon>
+          </button>
           <!-- Mostrar validación de error -->
           <mat-error *ngIf="isValidField('confirmPassword')">
-            {{ getErrorMessage('confirmPassword') }}
+            {{ getErrorMessage("confirmPassword") }}
           </mat-error>
         </mat-form-field>
         <!-- <mat-form-field class="full-width-input">
@@ -45,11 +82,29 @@
             </mat-option>
           </mat-select>
         </mat-form-field> -->
-
       </mat-card-content>
 
-      <button mat-stroked-button color="accent" class="btn-block">Registrarse</button>
-
+      <button
+        [disabled]="registerForm.invalid || isLoading == true"
+        type="submit"
+        mat-stroked-button
+        color="accent"
+        class="btn-block"
+      >
+        <span *ngIf="!isLoading">Registrarse</span>
+        <div
+          *ngIf="isLoading"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          class="spinner"
+        >
+          <mat-progress-spinner
+            mode="indeterminate"
+            value="100"
+            diameter="20"
+          ></mat-progress-spinner>
+        </div>
+      </button>
     </form>
   </mat-card>
 </div>

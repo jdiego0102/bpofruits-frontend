@@ -38,6 +38,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
@@ -81,6 +82,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LayoutModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot(),
   ],
   exports: [
     CommonModule,
@@ -123,6 +125,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LayoutModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    ToastrModule,
   ],
 })
 export class MatModule {}

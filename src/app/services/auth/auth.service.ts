@@ -48,16 +48,19 @@ export class AuthService {
 
   // Método login del usuario
   login(authData: User): Observable<UserResponse | void> {
-    console.log(authData);
     return this.http
       .post<UserResponse>(`${environment.API_URL}login`, authData)
       .pipe(
         map((res: UserResponse) => {
-          // Guadar token
-          this.saveToken(res.token);
-          // Setear propiedad true (El usuario está logueado)
-          this.loggedIn.next(true);
-          return res;
+          if (res.status == 'success') {
+            // Guadar token
+            this.saveToken(res.token);
+            // Setear propiedad true (El usuario está logueado)
+            this.loggedIn.next(true);
+            return res;
+          } else {
+            return res;
+          }
         }),
         // Obtener error
         catchError((err) => this.handlerError(err))

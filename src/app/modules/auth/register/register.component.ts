@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { MustMatch } from '../../../helpers/must-match.validator';
-import { User, UserResponse } from 'src/app/models/user.interface';
+import { UserResponse } from 'src/app/models/user.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   // Controlar spinner
   isLoading: boolean = false;
   // Controlar mostrar/ocultar contraseña
-  hide: boolean = false;
+  hide: boolean = true;
 
   // Obtener valores del formulario
   registerForm = this.fb.group(
@@ -38,7 +39,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -51,16 +53,34 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   // Método que se envía al botón para realizar registro de usuario
   onRegister(): void {
+    // Activar spinner de carga.
+    this.isLoading = true;
+
+    // Verificar si el formulario es valido para continuar
+    if (this.registerForm.invalid) {
+      return;
+    }
+    // Obtener array del formulario
     const formValue = this.registerForm.value;
 
     this.subscription.add(
+      // Obtener petición realizada por el servicio
       this.authService.register(formValue).subscribe((res: UserResponse) => {
         if (res.status == 'success') {
           this.router.navigate(['/']);
-
-          // this.isLoading = false;
+          // Mostrar notificación
+          this.toastr.success('Bienvenido', '¡Registro exitoso!', {
+            timeOut: 7000,
+            progressBar: true,
+          });
+          this.isLoading = false;
         } else {
-          console.log(res.msg);
+          // Mostrar notificación
+          this.toastr.error(res.msg, '¡Error!', {
+            timeOut: 7000,
+            progressBar: true,
+          });
+          this.isLoading = false;
         }
       })
     );
