@@ -13,13 +13,17 @@
 
   <h2 matSubheader>Páginas</h2>
 
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/">Dashboard</a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard
+  </a>
+
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/predio">
     <mat-icon>verified_user</mat-icon>
     Predio
   </a>
 
-  <mat-divider></mat-divider>
+  <!-- <mat-divider></mat-divider>
 
   <h2 matSubheader>Ajustes</h2>
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/">
@@ -30,6 +34,6 @@
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/">
     <mat-icon>calendar_today</mat-icon>
     Fecha
-  </a>
+  </a> -->
 
 </mat-nav-list>

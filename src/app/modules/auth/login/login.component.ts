@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.authService.login(formValue).subscribe((res: UserResponse) => {
         if (res.status == 'success') {
-          this.router.navigate(['/']);
+          this.router.navigate(['/admin']);
           // Mostrar notificación
           this.toastr.success('Bienvenido de nuevo...', '¡Hola!', {
             timeOut: 7000,
