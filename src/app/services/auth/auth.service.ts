@@ -52,6 +52,12 @@ export class AuthService {
       .post<UserResponse>(`${environment.API_URL}login`, authData)
       .pipe(
         map((res: UserResponse) => {
+          // Desestructurar array y obtener objeto del usuario retornado
+          const userRes: any[] = res.user;
+          let [objUser] = userRes;
+          // Almacenar en local storage name e email
+          localStorage.setItem('username', objUser.name);
+          localStorage.setItem('email', objUser.email);
           if (res.status == 'success') {
             // Guadar token
             this.saveToken(res.token);
@@ -69,7 +75,8 @@ export class AuthService {
 
   // Método remover token (Cerrar sesión)
   logout(): void {
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
+    localStorage.clear();
     // Setear propiedad false (El usuario no está logueado)
     this.loggedIn.next(false);
     this.router.navigate(['login']);

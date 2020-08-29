@@ -1,12 +1,12 @@
 <mat-nav-list>
   <div class="profile-card">
+
     <div class="header">
-      <div class="header">
-        <h2>Nombre de usuario</h2>
-        <h4>Nombre actor</h4>
-      </div>
-      <img src="assets/img/fruta.png" alt="Image">
+      <h2>{{ username }}</h2>
+      <h4>{{ email }}</h4>
     </div>
+    <img src="assets/img/fruta.png" alt="Image">
+
   </div>
 
   <mat-divider></mat-divider>
@@ -14,7 +14,10 @@
   <h2 matSubheader>Páginas</h2>
 
   <a mat-list-item routerLinkActive="list-item-active" routerLink="/">Dashboard</a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/predio">Predio</a>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/predio">
+    <mat-icon>verified_user</mat-icon>
+    Predio
+  </a>
 
   <mat-divider></mat-divider>
 
