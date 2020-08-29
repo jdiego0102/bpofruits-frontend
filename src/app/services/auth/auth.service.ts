@@ -25,8 +25,30 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
+  // Método registro del usuario
+  register(signIn: User): Observable<UserResponse | void> {
+    return this.http
+      .post<UserResponse>(`${environment.API_URL}signIn`, signIn)
+      .pipe(
+        map((res: UserResponse) => {
+          if (res.status == 'error') {
+            return res;
+          } else {
+            // Guadar token
+            this.saveToken(res.token);
+            // Setear propiedad true (El usuario está logueado)
+            this.loggedIn.next(true);
+            return res;
+          }
+        }),
+        // Obtener error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
   // Método login del usuario
   login(authData: User): Observable<UserResponse | void> {
+    console.log(authData);
     return this.http
       .post<UserResponse>(`${environment.API_URL}login`, authData)
       .pipe(

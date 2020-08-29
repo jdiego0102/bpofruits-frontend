@@ -69,7 +69,12 @@ mat-drawer-content {
   width: 100%;
 }
 
-.login-wrapper .full-width-input,
+.full-width-input {
+  width: 100%;
+  padding-top: 20px;
+}
+
+.login-wrapper,
 .login-wrapper .btn-block {
   width: 100%;
 }

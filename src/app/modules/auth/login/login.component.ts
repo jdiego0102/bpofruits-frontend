@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   // Controlar spinner
   isLoading: boolean = false;
+  // Controlar mostrar/ocultar contraseña
   hide = false;
   // Obtener valores del formulario
   loginForm = this.fb.group({
