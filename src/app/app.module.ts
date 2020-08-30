@@ -8,6 +8,7 @@ import { DefaultModule } from './layouts/default/default.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterModule } from './modules/auth/register/register.module';
 import { LoginModule } from './modules/auth/login/login.module';
+import { ActorModule } from './modules/actor/actor.module';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     RegisterModule,
     LoginModule,
+    ActorModule,
     ToastrModule.forRoot(),
   ],
   providers: [],

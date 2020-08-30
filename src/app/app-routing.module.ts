@@ -6,6 +6,7 @@ import { PredioComponent } from './modules/predio/predio.component';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { RegisterComponent } from './modules/auth/register/register.component';
 import { CheckLoginGuard } from './shared/guards/check-login.guard';
+import { ActorComponent } from './modules/actor/actor.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
       {
         path: 'predio',
         component: PredioComponent,
+        // canActivate: [CheckLoginGuard],
+      },
+      {
+        path: 'actor',
+        component: ActorComponent,
         // canActivate: [CheckLoginGuard],
       },
     ],
