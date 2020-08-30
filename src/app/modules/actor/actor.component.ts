@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ActorService } from '../../services/actor/actor.service';
+import { ToastrService } from 'ngx-toastr';
+import { ActorResponse } from 'src/app/models/actor.interface';
 
 @Component({
   selector: 'app-actor',
@@ -11,8 +14,17 @@ import { Router } from '@angular/router';
 export class ActorComponent implements OnInit, OnDestroy {
   // Controlar subscripciones y se debe inicializar
   private subscription: Subscription = new Subscription();
+  // Controlar spinner
+  isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  isUpdatingData: boolean = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private actorService: ActorService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -28,7 +40,36 @@ export class ActorComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  onSaveActor(): void {}
+  onSaveActor(): void {
+    // Activar spinner de carga.
+    this.isLoading = true;
+    // Obtener array del formulario
+    let formValue = this.actorForm.value;
+
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.actorService
+        .updateActor(formValue)
+        .subscribe((res: ActorResponse) => {
+          if (res.status == 'success') {
+            // this.router.navigate(['/']);
+            // Mostrar notificación
+            this.toastr.success(res.msg, res.title, {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.isLoading = false;
+          } else {
+            // Mostrar notificación
+            this.toastr.error(res.msg, '¡Error!', {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.isLoading = false;
+          }
+        })
+    );
+  }
 
   // Método para validar errores y retornar el mensaje con el mismo
   getErrorMessage(field: string): string {
@@ -50,4 +91,6 @@ export class ActorComponent implements OnInit, OnDestroy {
       !this.actorForm.get(field).valid
     );
   }
+
+  updateData(): void {}
 }

@@ -4,43 +4,56 @@
     <mat-icon>rate_review</mat-icon><span class="aligned-with-icon">Ingresar datos básicos</span>
   </div>
 
-  <form [formGroup]="actorForm" (ngSubmit)="onSaveActor()">
-    <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Nombres</mat-label>
-        <input type="text" formControlName="nombres" matInput placeholder="Nombres" required>
-        <mat-icon matSuffix>person</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('nombres')">
-          {{ getErrorMessage("nombres") }}
-        </mat-error>
-      </mat-form-field>
+  <div *ngIf="isUpdatingData" class="spacer">
+    <form [formGroup]="actorForm" (ngSubmit)="onSaveActor()">
+      <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Nombres</mat-label>
+          <input type="text" formControlName="nombres" matInput placeholder="Nombres" required>
+          <mat-icon matSuffix>person</mat-icon>
+          <!-- Mostrar validación de error -->
+          <mat-error *ngIf="isValidField('nombres')">
+            {{ getErrorMessage("nombres") }}
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Apellidos</mat-label>
-        <input type="text" formControlName="apellidos" matInput placeholder="Apellidos" required>
-        <mat-icon matSuffix>person</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('apellidos')">
-          {{ getErrorMessage("apellidos") }}
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Apellidos</mat-label>
+          <input type="text" formControlName="apellidos" matInput placeholder="Apellidos" required>
+          <mat-icon matSuffix>person</mat-icon>
+          <!-- Mostrar validación de error -->
+          <mat-error *ngIf="isValidField('apellidos')">
+            {{ getErrorMessage("apellidos") }}
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>N° Documento</mat-label>
-        <input type="number" formControlName="nro_documento" matInput placeholder="N° Documento" required>
-        <mat-icon matSuffix>list_alt</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('nro_documento')">
-          {{ getErrorMessage("nro_documento") }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>N° Documento</mat-label>
+          <input type="number" formControlName="nro_documento" matInput placeholder="N° Documento" required>
+          <mat-icon matSuffix>list_alt</mat-icon>
+          <!-- Mostrar validación de error -->
+          <mat-error *ngIf="isValidField('nro_documento')">
+            {{ getErrorMessage("nro_documento") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <div class="spacer btns" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-      <button type="submit" mat-raised-button color="primary" class="btn-block">
-        <span>Guardar</span>
-      </button>
-    </div>
-  </form>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <button [disabled]="actorForm.invalid || isLoading == true" type="submit" mat-raised-button color="primary"
+          class="btn-block">
+          <span *ngIf="!isLoading">Guardar</span>
+          <div *ngIf="isLoading" fxLayout="row" fxLayoutAlign="center center" class="spinner">
+            <mat-progress-spinner mode="indeterminate" value="100" diameter="20"></mat-progress-spinner>
+          </div>
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+
+  <button mat-mini-fab color="warn" aria-label="Example icon button with a home icon" class="custom-button"
+    (click)="isUpdatingData = !isUpdatingData">
+    <mat-icon>edit</mat-icon>
+  </button>
 </mat-card>

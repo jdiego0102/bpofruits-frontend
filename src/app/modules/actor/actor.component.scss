@@ -1,5 +1,5 @@
 .spacer {
-  margin-top: 15px;
+  margin-top: 25px;
 }
 
 .aligned-with-icon {
@@ -12,4 +12,15 @@
 
 .btn-block {
   width: 100%;
+  margin-top: 15px;
+}
+
+.custom-button {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.spinner {
+  padding: 10px;
 }
