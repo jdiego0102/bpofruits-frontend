@@ -34,6 +34,12 @@ export class AuthService {
           if (res.status == 'error') {
             return res;
           } else {
+            // Desestructurar array y obtener objeto del usuario retornado
+            const userRes: any[] = res.user;
+            let [objUser] = userRes;
+            // Almacenar en local storage name e email
+            localStorage.setItem('username', objUser.name);
+            localStorage.setItem('email', objUser.email);
             // Guadar token
             this.saveToken(res.token);
             // Setear propiedad true (El usuario está logueado)
@@ -52,13 +58,13 @@ export class AuthService {
       .post<UserResponse>(`${environment.API_URL}login`, authData)
       .pipe(
         map((res: UserResponse) => {
-          // Desestructurar array y obtener objeto del usuario retornado
-          const userRes: any[] = res.user;
-          let [objUser] = userRes;
-          // Almacenar en local storage name e email
-          localStorage.setItem('username', objUser.name);
-          localStorage.setItem('email', objUser.email);
           if (res.status == 'success') {
+            // Desestructurar array y obtener objeto del usuario retornado
+            const userRes: any[] = res.user;
+            let [objUser] = userRes;
+            // Almacenar en local storage name e email
+            localStorage.setItem('username', objUser.name);
+            localStorage.setItem('email', objUser.email);
             // Guadar token
             this.saveToken(res.token);
             // Setear propiedad true (El usuario está logueado)
