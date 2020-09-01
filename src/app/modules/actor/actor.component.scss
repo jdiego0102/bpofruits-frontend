@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 .spacer {
   margin-top: 25px;
 }
@@ -23,4 +27,8 @@
 
 .spinner {
   padding: 10px;
+}
+
+.loadingText {
+  font-weight: 400;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActorService } from '../../services/actor/actor.service';
 import { ToastrService } from 'ngx-toastr';
@@ -16,15 +16,26 @@ export class ActorComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   // Controlar spinner
   isLoading: boolean = false;
-
+  // Mostrar/Ocultar formulario del actor.
   isUpdatingData: boolean = false;
+  // Mostrar/Ocultar barra de progreso.
+  showProgressBar: boolean = true;
+  // Array actor
+  objActor: any = {};
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private actorService: ActorService,
     private toastr: ToastrService
-  ) {}
+  ) {
+    // Cargar datos del actor
+    this.onGetActor();
+    // Inicializar campos deshabilitados
+    this.actorForm.controls['nombres'].disable();
+    this.actorForm.controls['apellidos'].disable();
+    this.actorForm.controls['nro_documento'].disable();
+  }
 
   ngOnInit(): void {}
 
@@ -40,6 +51,7 @@ export class ActorComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  // Actualizar actor
   onSaveActor(): void {
     // Activar spinner de carga.
     this.isLoading = true;
@@ -59,6 +71,10 @@ export class ActorComponent implements OnInit, OnDestroy {
               progressBar: true,
             });
             this.isLoading = false;
+
+            this.actorForm.controls['nombres'].disable();
+            this.actorForm.controls['apellidos'].disable();
+            this.actorForm.controls['nro_documento'].disable();
           } else {
             // Mostrar notificación
             this.toastr.error(res.msg, '¡Error!', {
@@ -68,6 +84,31 @@ export class ActorComponent implements OnInit, OnDestroy {
             this.isLoading = false;
           }
         })
+    );
+  }
+
+  // Obtener datos del actor
+  onGetActor(): void {
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.actorService.getActor().subscribe((res: ActorResponse) => {
+        if (res) {
+          if (res.status == 'success') {
+            this.objActor = res.actor;
+
+            // Asignar valores del objeto los inputs del formlulario
+            this.actorForm.controls['nombres'].setValue(this.objActor.nombres);
+            this.actorForm.controls['apellidos'].setValue(
+              this.objActor.apellidos
+            );
+            this.actorForm.controls['nro_documento'].setValue(
+              this.objActor.nro_documento
+            );
+            this.showProgressBar = false;
+          } else {
+          }
+        }
+      })
     );
   }
 
@@ -92,5 +133,17 @@ export class ActorComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateData(): void {}
+  updatingData(): void {
+    this.isUpdatingData = !this.isUpdatingData;
+
+    if (this.isUpdatingData == true) {
+      this.actorForm.controls['nombres'].enable();
+      this.actorForm.controls['apellidos'].enable();
+      this.actorForm.controls['nro_documento'].enable();
+    } else {
+      this.actorForm.controls['nombres'].disable();
+      this.actorForm.controls['apellidos'].disable();
+      this.actorForm.controls['nro_documento'].disable();
+    }
+  }
 }

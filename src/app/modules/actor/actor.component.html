@@ -1,10 +1,40 @@
 <mat-card>
 
   <div class="spacer">
-    <mat-icon>rate_review</mat-icon><span class="aligned-with-icon">Ingresar datos básicos</span>
+    <mat-icon>rate_review</mat-icon><span class="aligned-with-icon">Datos básicos</span>
   </div>
 
-  <div *ngIf="isUpdatingData" class="spacer">
+  <!-- <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="center center">
+      Cargando...<mat-progress-spinner mode="indeterminate" value="100" diameter="50"></mat-progress-spinner>
+    </div>
+  </div>
+
+  <div *ngIf="!isUpdatingData" class="spacer">
+    <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+
+      <div class="spacer">
+        <mat-icon>how_to_reg</mat-icon>
+        <mat-label class="aligned-with-icon">Nombres: {{ objActor.nombres }}</mat-label>
+      </div>
+
+      <div class="spacer">
+        <mat-icon>person</mat-icon><span class="aligned-with-icon">Apellidos: {{ objActor.apellidos }}</span>
+      </div>
+
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="10px">
+      <div class="spacer">
+        <mat-icon>list_alt</mat-icon><span class="aligned-with-icon">N° Documento: {{ objActor.nro_documento }}</span>
+      </div>
+    </div>
+  </div> -->
+  <div *ngIf="showProgressBar">
+    <mat-progress-bar class="spacer" mode="indeterminate"></mat-progress-bar>
+    <span class="loadingText">Cargando...</span>
+  </div>
+  <div class="spacer">
     <form [formGroup]="actorForm" (ngSubmit)="onSaveActor()">
       <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
         <mat-form-field appearance="fill" fxFlex>
@@ -38,7 +68,7 @@
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+      <div *ngIf="isUpdatingData" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <button [disabled]="actorForm.invalid || isLoading == true" type="submit" mat-raised-button color="primary"
           class="btn-block">
           <span *ngIf="!isLoading">Guardar</span>
@@ -52,8 +82,8 @@
   </div>
 
 
-  <button mat-mini-fab color="warn" aria-label="Example icon button with a home icon" class="custom-button"
-    (click)="isUpdatingData = !isUpdatingData">
+  <button [disabled]="showProgressBar" mat-mini-fab color="warn" aria-label="Example icon button with a home icon"
+    class="custom-button" (click)="updatingData()">
     <mat-icon>edit</mat-icon>
   </button>
 </mat-card>

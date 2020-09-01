@@ -10,11 +10,17 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ActorService {
+  actor_id = localStorage.getItem('actor_id');
+
   constructor(private http: HttpClient, private router: Router) {}
 
-  getActor(id: number): Observable<ActorResponse | void> {
+  // Obtener actor por id
+  getActor(): Observable<ActorResponse | void> {
     return this.http
-      .post<ActorResponse>(`${environment.API_URL}updateActor/${id}`, {})
+      .post<ActorResponse>(
+        `${environment.API_URL}getActor/${this.actor_id}`,
+        {}
+      )
       .pipe(
         map((res: ActorResponse) => {
           return res;
@@ -23,7 +29,7 @@ export class ActorService {
         catchError((err) => this.handlerError(err))
       );
   }
-
+  // Actualizar actor por id
   updateActor(actor: Actor): Observable<ActorResponse | void> {
     // Asignar update_by del usuario que está logueado
     actor = {
@@ -34,7 +40,7 @@ export class ActorService {
     };
     return this.http
       .post<ActorResponse>(
-        `${environment.API_URL}updateActor/${localStorage.getItem('actor_id')}`,
+        `${environment.API_URL}updateActor/${this.actor_id}`,
         actor
       )
       .pipe(
