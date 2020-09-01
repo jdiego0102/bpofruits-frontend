@@ -75,6 +75,8 @@ export class ActorComponent implements OnInit, OnDestroy {
             this.actorForm.controls['nombres'].disable();
             this.actorForm.controls['apellidos'].disable();
             this.actorForm.controls['nro_documento'].disable();
+
+            this.isUpdatingData = false;
           } else {
             // Mostrar notificación
             this.toastr.error(res.msg, '¡Error!', {
@@ -116,10 +118,11 @@ export class ActorComponent implements OnInit, OnDestroy {
   getErrorMessage(field: string): string {
     let message = '';
     // Campo requerido
-    if (this.actorForm.get(field).errors.required) {
+    if (this.actorForm.get(field).errors?.required) {
       message = 'El campo es requerido.';
       // Correo inválido
-    } else if (this.actorForm.get(field).hasError('pattern')) {
+      // ? = los errores no siempre existen.
+    } else if (this.actorForm.get(field).errors?.hasError('pattern')) {
       message = 'Ingresar un correo válido.';
     }
     return message;

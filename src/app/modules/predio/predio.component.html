@@ -96,13 +96,18 @@
 
     <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
       <mat-form-field class="example-full-width" appearance="fill" fxFlex>
-        <input type="text" formControlName="departamento_id" placeholder="Departamento" aria-label="Number" matInput
+        <input type="text" placeholder="Departamento" formControlName="departamento_id" aria-label="Number" matInput
           [matAutocomplete]="auto" required>
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <!-- <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{ option }}
-          </mat-option> -->
+
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="diplayDp">
+          <mat-option *ngFor="let option of filteredDepartments | async" [value]="option">
+            {{ option.nombre_departamento }}
+          </mat-option>
         </mat-autocomplete>
+
+        <mat-progress-spinner *ngIf="showLoadingDepartment" matSuffix mode="indeterminate" value="100" diameter="20">
+        </mat-progress-spinner>
+
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('departamento_id')">
           {{ getErrorMessage("departamento_id") }}
@@ -150,12 +155,16 @@
         <span>Guardar y cerrar</span>
       </button>
 
-      <button type="submit" mat-stoked-button color="primary" class="btn-block">
+      <button type="button" mat-stoked-button color="primary" class="btn-block">
         <span>Crear cultivo</span>
       </button>
     </div>
   </form>
 
+  <button mat-mini-fab color="warn" aria-label="Example icon button with a home icon" class="custom-button"
+    (click)="updatingData()">
+    <mat-icon>edit</mat-icon>
+  </button>
 
 </mat-card>
 <!-- [formControl]="myControl" -->
