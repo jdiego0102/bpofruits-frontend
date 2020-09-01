@@ -1,34 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Predio, PredioResponse } from '../../models/predio.interface';
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
+import { DepartmentResponse } from '../../models/department.interface';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PredioService {
+export class DepartmentService {
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPredio(predio_id: number): void {}
-
-  // Realizar petición al servidor para guardar almacenar predio
-  savePredio(predio: Predio): Observable<PredioResponse | void> {
+  // Obtener departamentos
+  getDepartments(): Observable<DepartmentResponse | void> {
     return this.http
-      .post<PredioResponse>(`${environment.API_URL}savePredio`, { predio })
+      .get<DepartmentResponse>(`${environment.API_URL}departments/list`, {})
       .pipe(
-        map((res: PredioResponse) => {
+        map((res: DepartmentResponse) => {
           return res;
         }),
         // Capturar error
         catchError((err) => this.handlerError(err))
       );
   }
-
-  // Realizar petición al servidor para actualizar predio
-  updatePredio(predio_id: number): void {}
 
   // Controlar errores  de inicio de sesión
   handlerError(err: any): Observable<never> {

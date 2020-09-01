@@ -41,6 +41,7 @@ export class AuthService {
             localStorage.setItem('username', objUser.name);
             localStorage.setItem('email', objUser.email);
             localStorage.setItem('actor_id', objUser.actor_id);
+            localStorage.setItem('user_id', objUser.id);
             // Guadar token
             this.saveToken(res.token);
             // Setear propiedad true (El usuario está logueado)
@@ -67,6 +68,7 @@ export class AuthService {
             localStorage.setItem('username', objUser.name);
             localStorage.setItem('email', objUser.email);
             localStorage.setItem('actor_id', objUser.actor_id);
+            localStorage.setItem('user_id', objUser.id);
             // Guadar token
             this.saveToken(res.token);
             // Setear propiedad true (El usuario está logueado)
