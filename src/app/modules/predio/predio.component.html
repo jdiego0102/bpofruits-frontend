@@ -1,10 +1,14 @@
 <mat-card>
 
-
   <form [formGroup]="predioForm" (ngSubmit)="onSavePredio()">
 
     <div class="spacer">
       <mat-icon>verified_user</mat-icon><span class="aligned-with-icon">Crear predio</span>
+    </div>
+
+    <div *ngIf="showProgressBar">
+      <mat-progress-bar class="spacer" mode="indeterminate"></mat-progress-bar>
+      <span class="loadingText">Cargando...</span>
     </div>
 
     <div class="spacer" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -52,11 +56,11 @@
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Email</mat-label>
-        <input type="email" formControlName="email" matInput placeholder="Correo electrónico">
+        <input type="email" formControlName="correo" matInput placeholder="Correo electrónico">
         <mat-icon matSuffix>email</mat-icon>
         <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('email')">
-          {{ getErrorMessage("email") }}
+        <mat-error *ngIf="isValidField('correo')">
+          {{ getErrorMessage("correo") }}
         </mat-error>
       </mat-form-field>
     </div>
@@ -76,7 +80,7 @@
       <div fxLaout="column" fxLayoutGap="20px">
         <mat-form-field appearance="fill" fxFlex>
           <mat-label>Cuenta</mat-label>
-          <input type="number" formControlName="cuenta" matInput placeholder="Cuenta">
+          <input type="text" formControlName="cuenta" matInput placeholder="Cuenta">
           <mat-icon matSuffix>account_balance</mat-icon>
         </mat-form-field>
 
@@ -96,6 +100,7 @@
     <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="department" #department="matAutocomplete"-->
     <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
       <mat-form-field class="example-full-width" appearance="fill" fxFlex>
+        <mat-label>Departamento</mat-label>
         <input type="text" placeholder="Departamento" formControlName="departamento_id" aria-label="Number" matInput
           [matAutocomplete]="department" required>
 
@@ -116,6 +121,7 @@
 
       <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="city" #city="matAutocomplete"-->
       <mat-form-field class="example-full-width" appearance="fill" fxFlex>
+        <mat-label>Ciudad</mat-label>
         <input type="text" formControlName="ciudad_id" placeholder="Ciudad" aria-label="Number" matInput
           [matAutocomplete]="city" required>
         <mat-autocomplete autoActiveFirstOption #city="matAutocomplete" [displayWith]="diplayCit">
@@ -133,6 +139,7 @@
 
       <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="city" #city="matAutocomplete"-->
       <mat-form-field class="example-full-width" appearance="fill" fxFlex>
+        <mat-label>Vereda</mat-label>
         <input type="text" formControlName="vereda_id" placeholder="Vereda" aria-label="Number" matInput
           [matAutocomplete]="sidewalk" required>
         <mat-autocomplete autoActiveFirstOption #sidewalk="matAutocomplete" [displayWith]="diplaySid">
@@ -152,16 +159,21 @@
     <div class="spacer textArea" fxLayout="column">
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Observaciones</mat-label>
-        <textarea matInput></textarea>
+        <textarea formControlName="observaciones" matInput></textarea>
       </mat-form-field>
     </div>
 
-    <div class="btns" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-      <button type="submit" mat-raised-button color="primary" class="btn-block">
-        <span>Guardar y cerrar</span>
+    <div *ngIf="isUpdatingData" class="btns" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+      fxLayoutGap.lt-md="0px">
+      <button [disabled]="predioForm.invalid || isLoading == true" type="submit" mat-raised-button color="primary"
+        class="btn-block">
+        <span *ngIf="!isLoading">Guardar y cerrar</span>
+        <div *ngIf="isLoading" fxLayout="row" fxLayoutAlign="center center" class="spinner">
+          <mat-progress-spinner mode="indeterminate" value="100" diameter="20"></mat-progress-spinner>
+        </div>
       </button>
 
-      <button type="button" mat-stoked-button color="primary" class="btn-block">
+      <button [disabled]="true" type="button" mat-stoked-button color="primary" class="btn-block">
         <span>Crear cultivo</span>
       </button>
     </div>

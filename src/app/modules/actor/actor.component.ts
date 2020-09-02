@@ -108,6 +108,8 @@ export class ActorComponent implements OnInit, OnDestroy {
             );
             this.showProgressBar = false;
           } else {
+            this.isUpdatingData = true;
+            this.showProgressBar = false;
           }
         }
       })

@@ -72,17 +72,18 @@ export class PredioComponent implements OnInit, OnDestroy {
   // Ciudad seleccionado
   sidewalkSelect: Sidewalk;
 
+  // Objeto predio
+  objPredio: any = {};
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private actorService: PredioService,
+    private predioService: PredioService,
     private departmentService: DepartmentService,
     private citytService: CityService,
     private sideWalkService: SidewalkService,
     private toastr: ToastrService
-  ) {
-    this.onGetDepartments();
-  }
+  ) {}
 
   ngOnInit(): void {
     // Obtener valores del formulario del predio y validaciones
@@ -91,14 +92,18 @@ export class PredioComponent implements OnInit, OnDestroy {
       telefono1: ['', [Validators.required]],
       telefono2: [''],
       contacto: ['', [Validators.required]],
-      email: ['', Validators.pattern(this.isValidEmail)],
+      correo: ['', Validators.pattern(this.isValidEmail)],
       representante_legal: ['', [Validators.required]],
       cuenta: [''],
       rut: [''],
       departamento_id: ['', [Validators.required]],
       ciudad_id: ['', [Validators.required]],
       vereda_id: ['', [Validators.required]],
+      observaciones: [''],
     });
+
+    // Inicializar campos deshabilitados
+    this.predioForm.disable();
 
     this.filteredDepartments = this.predioForm
       .get('departamento_id')
@@ -137,6 +142,7 @@ export class PredioComponent implements OnInit, OnDestroy {
     this.predioForm.controls['departamento_id'].disable();
     this.predioForm.controls['ciudad_id'].disable();
     this.predioForm.controls['vereda_id'].disable();
+    this.onGetPredio();
   }
 
   // Filtrar departamentos
@@ -224,17 +230,67 @@ export class PredioComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  updatingData(): void {}
+  // Obtener datos del predio por usuario
+  onGetPredio(): void {
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.predioService.getPredio().subscribe((res: PredioResponse) => {
+        if (res) {
+          if (res.status == 'success') {
+            this.objPredio = res.predio[0];
+
+            console.log(this.objPredio.nombre_vereda);
+
+            // Asignar valores del objeto los inputs del formulario
+            this.predioForm.controls['nombre_predio'].setValue(
+              this.objPredio.nombre_predio
+            );
+            this.predioForm.controls['telefono1'].setValue(
+              this.objPredio.telefono1
+            );
+            this.predioForm.controls['telefono2'].setValue(
+              this.objPredio.telefono2
+            );
+            this.predioForm.controls['contacto'].setValue(
+              this.objPredio.contacto
+            );
+            this.predioForm.controls['correo'].setValue(this.objPredio.correo);
+            this.predioForm.controls['representante_legal'].setValue(
+              this.objPredio.representante_legal
+            );
+            this.predioForm.controls['cuenta'].setValue(this.objPredio.cuenta);
+            this.predioForm.controls['rut'].setValue(this.objPredio.rut);
+            this.predioForm.controls['vereda_id'].setValue({
+              nombre_vereda: this.objPredio.nombre_vereda,
+            });
+            this.predioForm.controls['observaciones'].setValue(
+              this.objPredio.observaciones
+            );
+            this.showProgressBar = false;
+          } else {
+            // Mostrar notificación
+            this.toastr.warning(res.msg, res.title, {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.isUpdatingData = true;
+          }
+        }
+      })
+    );
+  }
 
   onSavePredio(): void {
     // Activar spinner de carga.
     this.isLoading = true;
-    // Obtener array del formulario
+    // Asiganar el valor de la vereda seleccionada al valor del formulario.
+    this.predioForm.get('vereda_id').setValue(this.sidewalkSelect.vereda_id);
+    // Obtener valores del formulario
     let formValue = this.predioForm.value;
 
     this.subscription.add(
       // Obtener petición realizada por el servicio
-      this.actorService
+      this.predioService
         .savePredio(formValue)
         .subscribe((res: PredioResponse) => {
           if (res) {
@@ -246,9 +302,8 @@ export class PredioComponent implements OnInit, OnDestroy {
               });
               this.isLoading = false;
 
-              // this.predioForm.controls['nombres'].disable();
-              // this.predioForm.controls['apellidos'].disable();
-              // this.predioForm.controls['nro_documento'].disable();
+              // Deshabilitar todo el formulario
+              this.predioForm.disable();
 
               this.isUpdatingData = false;
             } else {
@@ -330,7 +385,6 @@ export class PredioComponent implements OnInit, OnDestroy {
         .getSidewalk(cityId)
         .subscribe((res: SidewalkResponse) => {
           if (res) {
-            console.log(res);
             if (res.status == 'success') {
               this.sidewalks = res.sidewalks;
 
@@ -353,10 +407,10 @@ export class PredioComponent implements OnInit, OnDestroy {
   getErrorMessage(field: string): string {
     let message = '';
     // Campo requerido
-    if (this.predioForm.get(field).errors.required) {
+    if (this.predioForm.get(field).errors?.required) {
       message = 'El campo es requerido.';
       // Correo inválido
-    } else if (this.predioForm.get(field).hasError('pattern')) {
+    } else if (this.predioForm.get(field).errors?.hasError('pattern')) {
       message = 'Ingresar un correo válido.';
     }
     return message;
@@ -369,5 +423,18 @@ export class PredioComponent implements OnInit, OnDestroy {
         this.predioForm.get(field).dirty) &&
       !this.predioForm.get(field).valid
     );
+  }
+
+  // Permitir modificar predio
+  updatingData(): void {
+    this.isUpdatingData = !this.isUpdatingData;
+
+    // Habilitar/Deshabilitar campos del formulario
+    if (this.isUpdatingData == true) {
+      this.onGetDepartments();
+      this.predioForm.enable();
+    } else {
+      this.predioForm.disable();
+    }
   }
 }
