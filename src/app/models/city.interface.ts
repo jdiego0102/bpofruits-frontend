@@ -1,11 +1,12 @@
 export interface City {
   ciudad_id: number;
-  departamento_id: number;
   nombre_ciudad: string;
+  departamento_id: number;
 }
 
-export interface DepartamentResponse {
+export interface CityResponse {
   status: string;
   title?: string;
   msg: string;
+  cities: [];
 }

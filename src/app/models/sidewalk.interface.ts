@@ -8,4 +8,5 @@ export interface SidewalkResponse {
   status: string;
   title?: string;
   msg: string;
+  sidewalks: [];
 }

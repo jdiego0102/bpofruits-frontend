@@ -5,7 +5,6 @@ import { Observable, throwError } from 'rxjs';
 import { DepartmentResponse } from '../../models/department.interface';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
-import { async } from 'rxjs/internal/scheduler/async';
 
 @Injectable({
   providedIn: 'root',
