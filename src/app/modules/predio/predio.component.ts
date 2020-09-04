@@ -20,6 +20,7 @@ import {
 import { startWith, map } from 'rxjs/operators';
 import { CityResponse, City } from 'src/app/models/city.interface';
 import { SidewalkResponse, Sidewalk } from 'src/app/models/sidewalk.interface';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-predio',
@@ -139,6 +140,7 @@ export class PredioComponent implements OnInit, OnDestroy {
       )
     );
 
+    // Deshabilitar solo dichos campos
     this.predioForm.controls['departamento_id'].disable();
     this.predioForm.controls['ciudad_id'].disable();
     this.predioForm.controls['vereda_id'].disable();
@@ -273,7 +275,13 @@ export class PredioComponent implements OnInit, OnDestroy {
               timeOut: 7000,
               progressBar: true,
             });
+
             this.isUpdatingData = true;
+            // Deshabilitar todo el formulario
+            this.predioForm.enable();
+            this.showProgressBar = false;
+
+            this.onGetDepartments();
           }
         }
       })
@@ -313,6 +321,9 @@ export class PredioComponent implements OnInit, OnDestroy {
                 progressBar: true,
               });
               this.isLoading = false;
+              // Deshabilitar todo el formulario
+              this.predioForm.enable();
+              this.showProgressBar = false;
             }
           }
         })
@@ -428,6 +439,8 @@ export class PredioComponent implements OnInit, OnDestroy {
   // Permitir modificar predio
   updatingData(): void {
     this.isUpdatingData = !this.isUpdatingData;
+
+    // this.onGetDepartments();
 
     // Habilitar/Deshabilitar campos del formulario
     if (this.isUpdatingData == true) {

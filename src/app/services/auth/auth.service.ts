@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment.prod';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { UserResponse, User } from '../../models/user.interface';
 import { catchError, map } from 'rxjs/operators';
@@ -13,6 +13,9 @@ const helper = new JwtHelperService();
   providedIn: 'root',
 })
 export class AuthService {
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json; charset=utf-8',
+  });
   // Propiedad para cambiar el estado de componentes y demás en todos los componentes.
   private loggedIn = new BehaviorSubject<boolean>(false);
 
@@ -57,7 +60,12 @@ export class AuthService {
   // Método login del usuario
   login(authData: User): Observable<UserResponse | void> {
     return this.http
-      .post<UserResponse>(`${environment.API_URL}login`, authData)
+      .post<UserResponse>(
+        `${environment.API_URL}login`,
+        authData /* {
+        headers: this.headers,
+      } */
+      )
       .pipe(
         map((res: UserResponse) => {
           if (res.status == 'success') {
