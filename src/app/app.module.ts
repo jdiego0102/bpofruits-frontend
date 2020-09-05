@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterModule } from './modules/auth/register/register.module';
 import { LoginModule } from './modules/auth/login/login.module';
 import { ActorModule } from './modules/actor/actor.module';
+import { CultureModule } from './modules/culture/culture.module';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
     RegisterModule,
     LoginModule,
     ActorModule,
+    CultureModule,
     ToastrModule.forRoot(),
   ],
   providers: [],

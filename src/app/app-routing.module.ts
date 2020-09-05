@@ -7,6 +7,7 @@ import { LoginComponent } from './modules/auth/login/login.component';
 import { RegisterComponent } from './modules/auth/register/register.component';
 import { CheckLoginGuard } from './shared/guards/check-login.guard';
 import { ActorComponent } from './modules/actor/actor.component';
+import { CultureComponent } from './modules/culture/culture.component';
 
 const routes: Routes = [
   {
@@ -29,13 +30,18 @@ const routes: Routes = [
         canActivate: [CheckLoginGuard],
       },
       {
+        path: 'actor',
+        component: ActorComponent,
+        // canActivate: [CheckLoginGuard],
+      },
+      {
         path: 'predio',
         component: PredioComponent,
         // canActivate: [CheckLoginGuard],
       },
       {
-        path: 'actor',
-        component: ActorComponent,
+        path: 'crops',
+        component: CultureComponent,
         // canActivate: [CheckLoginGuard],
       },
     ],

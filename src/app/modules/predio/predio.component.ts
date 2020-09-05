@@ -106,6 +106,7 @@ export class PredioComponent implements OnInit, OnDestroy {
     // Inicializar campos deshabilitados
     this.predioForm.disable();
 
+    // Obtener valor y cambios del departamento filtrado
     this.filteredDepartments = this.predioForm
       .get('departamento_id')
       .valueChanges.pipe(
@@ -120,6 +121,7 @@ export class PredioComponent implements OnInit, OnDestroy {
         )
       );
 
+    // Obtener valor y cambios de la ciudad filtrada
     this.filteredCities = this.predioForm.get('ciudad_id').valueChanges.pipe(
       startWith(''),
       map((cityValue) =>
@@ -129,7 +131,7 @@ export class PredioComponent implements OnInit, OnDestroy {
         nombre_ciudad ? this._filterCity(nombre_ciudad) : this.cities.slice()
       )
     );
-
+    // Obtener valor y cambios de la vereda filtrada
     this.filteredSidewalks = this.predioForm.get('vereda_id').valueChanges.pipe(
       startWith(''),
       map((value) => (typeof value === 'string' ? value : value.nombre_vereda)),
