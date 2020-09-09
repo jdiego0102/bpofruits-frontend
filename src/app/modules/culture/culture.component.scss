@@ -1,0 +1,20 @@
+.form-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-list>*:not(:last-child) {
+  margin-bottom: 32px;
+}
+
+.form-grid-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.spacer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

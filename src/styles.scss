@@ -11,3 +11,32 @@ body {
 }
 
 @import '~ngx-toastr/toastr.css';
+
+.aligned-with-icon {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 400;
+
+  mat-icon {
+    margin-right: 10px;
+  }
+}
+
+.aligned-with-icon-button {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+
+  mat-icon {
+    margin-right: 1%;
+  }
+}
+
+.spacer {
+  margin-top: 15px;
+}
+
+.spinner {
+  padding: 12px;
+}
