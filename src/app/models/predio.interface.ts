@@ -16,9 +16,16 @@ export interface Predio {
   user_id: number;
 }
 
+export interface States {
+  predio_id?: number;
+  nombre_predio: string;
+  representante_legal: string;
+}
+
 export interface PredioResponse {
   status: string;
   title?: string;
   msg?: string;
   predio?: {};
+  states?: States[];
 }

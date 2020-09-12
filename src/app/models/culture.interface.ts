@@ -4,3 +4,17 @@ export interface HarvestData {
   quality: string;
   tons: number;
 }
+
+export interface Culture {
+  predio_id: number;
+  producto_id: number;
+  calidad_producto_id: number;
+  area_produccion: number;
+  area_desarrollo: number;
+  ton_hectarea: number;
+  venta_estimada: number;
+  edad_cultivo: number;
+  tipo_cultivo_id: number;
+  peso_ultima_cosecha: number;
+  predio_exportador: string;
+}

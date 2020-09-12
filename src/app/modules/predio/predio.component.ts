@@ -429,7 +429,7 @@ export class PredioComponent implements OnInit, OnDestroy {
     return message;
   }
 
-  // Método valdiar acciones con el campo de texto
+  // Método validar acciones con el campo de texto
   isValidField(field: string): boolean {
     return (
       (this.predioForm.get(field).touched ||

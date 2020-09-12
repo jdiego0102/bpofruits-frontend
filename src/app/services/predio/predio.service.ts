@@ -54,6 +54,22 @@ export class PredioService {
       );
   }
 
+  // Consultar predios por usuario
+  getStates(): Observable<PredioResponse | void> {
+    return this.http
+      .get<PredioResponse>(
+        `${environment.API_URL}getStates/${this.user_id}`,
+        {}
+      )
+      .pipe(
+        map((res: PredioResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
   // Realizar petición al servidor para guardar almacenar predio
   savePredio(predio: Predio): Observable<PredioResponse | void> {
     // Asignar update_by del usuario que está logueado
