@@ -7,9 +7,14 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HarvestData } from '../../../models/culture.interface';
+import {
+  CropType,
+  CropTypeResponse,
+  HarvestData,
+} from '../../../models/culture.interface';
 import { PredioService } from 'src/app/services/predio/predio.service';
 import { ProductService } from '../../../services/product/product.service';
+import { CropService } from '../../../services/culture/crop.service';
 import { Subscription, Observable } from 'rxjs';
 import { PredioResponse, States } from '../../../models/predio.interface';
 import { ToastrService } from 'ngx-toastr';
@@ -45,6 +50,8 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   showLoadingProducts = false;
   // Cargando calidad del producto
   showLoadingProductQuality = false;
+  // Cargando tipos de cultivos
+  showLoadingCropTypes = true;
   // Array predios
   states: States[] = [];
 
@@ -56,6 +63,8 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   productQuality: ProducQuality[] = [];
   // Array productos
   products: Product[] = [];
+  // Array tipos de cultivo
+  cropTypes: CropType[] = [];
   // Producto seleccionado
   productSelected: Product;
 
@@ -70,6 +79,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<CreateCropDialogComponent>,
     private predioService: PredioService,
     private productService: ProductService,
+    private cropService: CropService,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) {}
@@ -78,6 +88,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     this.onGetStates();
     this.onGetProductTypes();
     this.onGetProductQuality();
+    this.onGetCropType();
 
     // Obtener valores del formulario del cultivo y validaciones
     this.cultureForm = this.fb.group({
@@ -149,7 +160,9 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     return subjectProduct ? subjectProduct.nombre : undefined;
   }
 
-  onTest(): void {}
+  onTest(): void {
+    console.log(this.cultureForm);
+  }
 
   // Destrucción de componente.
   // Terminar subcripción para evitar consumo de memoria.
@@ -187,6 +200,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Obtener productos por tipo producto
   onGetProduct(productTypeId): void {
     this.showLoadingProducts = true;
     // this.predioForm.controls['ciudad_id'].patchValue('');
@@ -268,6 +282,31 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
             }
           }
         })
+    );
+  }
+
+  // Obtener tipos cultivos
+  onGetCropType(): void {
+    this.showLoadingCropTypes = true;
+
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.cropService.getCropType().subscribe((res: CropTypeResponse) => {
+        if (res) {
+          if (res.status == 'success') {
+            this.cropTypes = res.cropType;
+
+            this.showLoadingCropTypes = false;
+          } else {
+            // Mostrar notificación
+            this.toastr.error(res.msg, res.title, {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.showLoadingCropTypes = false;
+          }
+        }
+      })
     );
   }
 
