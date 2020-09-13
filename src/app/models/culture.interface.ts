@@ -1,5 +1,5 @@
 // Datos de cosecha.
-export interface HarvestData {
+export interface Harvest {
   date: string;
   quality: string;
   tons: number;

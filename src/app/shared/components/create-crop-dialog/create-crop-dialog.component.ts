@@ -10,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   CropType,
   CropTypeResponse,
-  HarvestData,
+  Harvest,
 } from '../../../models/culture.interface';
 import { PredioService } from 'src/app/services/predio/predio.service';
 import { ProductService } from '../../../services/product/product.service';
@@ -28,16 +28,48 @@ import {
 } from '../../../models/product.interface';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { map, startWith, tap } from 'rxjs/operators';
+/* Format datePicker  */
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 
-const HARVEST_DATA_EXAMPLE: HarvestData[] = [
-  { date: '2020-09-28', quality: 'Label 1', tons: 1.0079 },
-  { date: '2020-09-28', quality: 'Label 2', tons: 4.0026 },
-  { date: '2020-09-28', quality: 'Label 3', tons: 6.941 },
-];
+import * as _moment from 'moment';
+import { defaultFormat as _rollupMoment } from 'moment';
+import { DatePipe } from '@angular/common';
+
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+  parse: {
+    dateInput: ['LL', 'YYYY-MM-DD'],
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
 @Component({
   selector: 'app-create-crop-dialog',
   templateUrl: './create-crop-dialog.component.html',
   styleUrls: ['./create-crop-dialog.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: DatePipe },
+  ],
 })
 export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Controlar subscripciones y se debe inicializar
@@ -65,14 +97,25 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   // Array tipos de cultivo
   cropTypes: CropType[] = [];
+  // Edad del cultivo
+  cropAge: number[] = [];
   // Producto seleccionado
   productSelected: Product;
 
+  // Calidad producto a filtrar
+  filteredProductQuality = new Observable<ProducQuality[]>();
+  // Calidad producto seleccionado
+  productQualitySelected: ProducQuality;
+
   // Formulario
   cultureForm: FormGroup;
+  // Columnas datatable cosecha
+  displayedColumns: string[] = ['date', 'quality', 'tons', 'actions'];
+  // Array cosecha
+  HARVEST_DATA: Harvest[] = [];
+  dataSource = this.HARVEST_DATA;
 
-  displayedColumns: string[] = ['date', 'quality', 'tons'];
-  dataSource = HARVEST_DATA_EXAMPLE;
+  harvest: Harvest = null;
 
   @Input() templateRef: TemplateRef<any>;
   constructor(
@@ -81,14 +124,19 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private cropService: CropService,
     private fb: FormBuilder,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private _adapter: DateAdapter<any>,
+    private datePipe: DatePipe
+  ) {
+    this._adapter.setLocale('es');
+  }
 
   ngOnInit(): void {
     this.onGetStates();
     this.onGetProductTypes();
     this.onGetProductQuality();
     this.onGetCropType();
+    this.onGetCropAge();
 
     // Obtener valores del formulario del cultivo y validaciones
     this.cultureForm = this.fb.group({
@@ -116,25 +164,31 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     // Deshabilitar variedad (Se activa al contrar datos de productos)
     this.cultureForm.controls['producto_id'].disable();
 
-    // Obtener valor y cambios del departamento filtrado
+    // Obtener valor y cambios del tipo de producto filtrado
     this.cultureForm.controls[
       'tipo_producto_id'
     ].valueChanges.subscribe((productId) => this.onGetProduct(productId));
 
-    // Obtener valor y cambios del departamento filtrado
+    // Obtener valor y cambios del producto filtrado
     this.filteredProducts = this.cultureForm
       .get('producto_id')
       .valueChanges.pipe(
         startWith(''),
-        tap(() => console.log('tap')),
         map((value) => (typeof value === 'string' ? value : value.nombre)),
         map((nombre) =>
           nombre ? this._filterProducts(nombre) : this.products.slice()
         )
       );
+
+    // Obtener valor y cambios de calidad producto filtrado
+    this.cultureForm.controls[
+      'calidad_producto_id'
+    ].valueChanges.subscribe((productId) =>
+      this._filterProductQuality(productId)
+    );
   }
 
-  // Filtrar departamentos
+  // Filtrar productos
   private _filterProducts(value: string): Product[] {
     const filterValue = value.toString().toLowerCase();
 
@@ -147,21 +201,59 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
       this.productSelected.variedad
     );
 
-    // Obtener ciudades por departamento filtrado
-    // this.onGetCities(this.departmentSelect.departamento_id);
+    // Obtener productos por tipo producto
     return this.products.filter(
       (option) =>
         option['nombre'].toString().toLowerCase().indexOf(filterValue) === 0
     );
   }
 
-  // Mostrar nombre del departamento seleccionado
+  // Mostrar nombre del producto seleccionado
   diplayPd(subjectProduct) {
     return subjectProduct ? subjectProduct.nombre : undefined;
   }
 
+  // Filtrar calidad de los productos
+  private _filterProductQuality(value: number): ProducQuality[] {
+    const filterValue = value.toString().toLowerCase();
+
+    // Obtener el primer valor del filtro y asignarlo al objeto.
+    this.productQualitySelected = this.productQuality.filter((option) =>
+      option['calidad_producto_id'].toString().includes(filterValue)
+    )[0];
+
+    this.cultureForm.controls['calidad_producto_id_2'].patchValue(
+      this.productQualitySelected.descripcion
+    );
+
+    // Obtener calidad del producto
+    return this.productQuality.filter(
+      (option) =>
+        option['calidad_producto_id']
+          .toString()
+          .toLowerCase()
+          .indexOf(filterValue) === 0
+    );
+  }
+
   onTest(): void {
-    console.log(this.cultureForm);
+    // Obtener valores de fecha y formatear
+    let datePicker = this.cultureForm.get('fecha_esperada_cosecha').value._d;
+
+    // Establecer valores para objeto de la cosecha.
+    let harvestDate = this.datePipe.transform(datePicker, 'yyyy-MM-dd');
+    let harvestQuality = this.productQualitySelected.descripcion;
+    let tons = this.cultureForm.get('ton_producidas').value;
+
+    // Armar objeto cosecha y añadir al array
+    this.dataSource.push(
+      (this.harvest = {
+        date: harvestDate,
+        quality: harvestQuality,
+        tons: tons,
+      })
+    );
+    this.dataSource = [...this.dataSource];
   }
 
   // Destrucción de componente.
@@ -177,7 +269,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Obtener predios del usuario
   onGetStates(): void {
     this.showLoadingStates = true;
-    // this.predioForm.controls['ciudad_id'].patchValue('');
 
     this.subscription.add(
       // Obtener petición realizada por el servicio
@@ -187,7 +278,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
             this.states = res.states;
 
             this.showLoadingStates = false;
-            // this.predioForm.controls['ciudad_id'].enable();
           } else {
             // Mostrar notificación
             this.toastr.error(res.msg, res.title, {
@@ -203,7 +293,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Obtener productos por tipo producto
   onGetProduct(productTypeId): void {
     this.showLoadingProducts = true;
-    // this.predioForm.controls['ciudad_id'].patchValue('');
 
     this.subscription.add(
       // Obtener petición realizada por el servicio
@@ -231,7 +320,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Obtener tipos de productos
   onGetProductTypes(): void {
     this.showLoadingProductTypes = true;
-    // this.predioForm.controls['ciudad_id'].patchValue('');
 
     this.subscription.add(
       // Obtener petición realizada por el servicio
@@ -260,7 +348,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Obtener calidad del producto
   onGetProductQuality(): void {
     this.showLoadingProductQuality = true;
-    // this.predioForm.controls['ciudad_id'].patchValue('');
 
     this.subscription.add(
       // Obtener petición realizada por el servicio
@@ -309,6 +396,12 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
       })
     );
   }
+  // Cargar edad del cultivo
+  onGetCropAge(): void {
+    for (let i = 1; i <= 50; i++) {
+      this.cropAge.push(i);
+    }
+  }
 
   // Método para validar errores y retornar el mensaje con el mismo
   getErrorMessage(field: string): string {
@@ -330,4 +423,8 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   }
 
   onSaveCrop(): void {}
+
+  rmHarvest(element: Harvest): void {
+    console.log(element);
+  }
 }

@@ -17,7 +17,13 @@
           </mat-option>
         </mat-select>
         <!-- Mostrar componente de carga -->
-        <mat-progress-spinner *ngIf="showLoadingStates" matSuffix mode="indeterminate" value="100" diameter="20">
+        <mat-progress-spinner
+          *ngIf="showLoadingStates"
+          matSuffix
+          mode="indeterminate"
+          value="100"
+          diameter="20"
+        >
         </mat-progress-spinner>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('predio_id')">
@@ -26,18 +32,26 @@
       </mat-form-field>
     </div>
 
-
     <h2 class="spacer" mat-dialog-title>Datos del Producto</h2>
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
       <mat-form-field appearance="fill" fxFlex="0 1 calc(33.3% - 32px)">
         <mat-label>Tipo producto</mat-label>
         <mat-select formControlName="tipo_producto_id" required>
-          <mat-option *ngFor="let productType of productTypes" [value]="productType.tipo_producto_id">
+          <mat-option
+            *ngFor="let productType of productTypes"
+            [value]="productType.tipo_producto_id"
+          >
             {{ productType.descripcion }}
           </mat-option>
         </mat-select>
         <!-- Mostrar componente de carga -->
-        <mat-progress-spinner *ngIf="showLoadingProductTypes" matSuffix mode="indeterminate" value="100" diameter="20">
+        <mat-progress-spinner
+          *ngIf="showLoadingProductTypes"
+          matSuffix
+          mode="indeterminate"
+          value="100"
+          diameter="20"
+        >
         </mat-progress-spinner>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('tipo_producto_id')">
@@ -45,20 +59,43 @@
         </mat-error>
       </mat-form-field>
 
-
-      <mat-form-field class="example-full-width" appearance="fill" fxFlex="0 1
-        calc(33.3% - 32px)">
+      <mat-form-field
+        class="example-full-width"
+        appearance="fill"
+        fxFlex="0 1
+        calc(33.3% - 32px)"
+      >
         <mat-label>Producto</mat-label>
-        <input type="text" formControlName="producto_id" placeholder="Producto" aria-label="Text" matInput
-          [matAutocomplete]="product" required>
+        <input
+          type="text"
+          formControlName="producto_id"
+          placeholder="Producto"
+          aria-label="Text"
+          matInput
+          [matAutocomplete]="product"
+          required
+        />
 
-        <mat-autocomplete autoActiveFirstOption #product="matAutocomplete" [displayWith]="diplayPd">
-          <mat-option *ngFor="let option of filteredProducts | async" [value]="option">
+        <mat-autocomplete
+          autoActiveFirstOption
+          #product="matAutocomplete"
+          [displayWith]="diplayPd"
+        >
+          <mat-option
+            *ngFor="let option of filteredProducts | async"
+            [value]="option"
+          >
             {{ option.nombre }} ({{ option.variedad }})
           </mat-option>
         </mat-autocomplete>
 
-        <mat-progress-spinner *ngIf="showLoadingProducts" matSuffix mode="indeterminate" value="100" diameter="20">
+        <mat-progress-spinner
+          *ngIf="showLoadingProducts"
+          matSuffix
+          mode="indeterminate"
+          value="100"
+          diameter="20"
+        >
         </mat-progress-spinner>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('producto_id')">
@@ -66,11 +103,22 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="example-full-width" appearance="fill" fxFlex="0 1
-        calc(33.3% - 32px)">
+      <mat-form-field
+        class="example-full-width"
+        appearance="fill"
+        fxFlex="0 1
+        calc(33.3% - 32px)"
+      >
         <mat-label>Variedad</mat-label>
-        <input type="text" formControlName="variedad" placeholder="Variedad" aria-label="Text" matInput
-          [matAutocomplete]="variety" required>
+        <input
+          type="text"
+          formControlName="variedad"
+          placeholder="Variedad"
+          aria-label="Text"
+          matInput
+          [matAutocomplete]="variety"
+          required
+        />
 
         <mat-autocomplete autoActiveFirstOption #variety="matAutocomplete">
           <!-- <mat-option *ngFor="let option of filteredDepartments | async" [value]="option">
@@ -87,19 +135,25 @@
       </mat-form-field>
     </div>
 
-
     <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
-
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Calidad</mat-label>
         <mat-select formControlName="calidad_producto_id" required>
-          <mat-option *ngFor="let option of productQuality" [value]="option.calidad_producto_id">
+          <mat-option
+            *ngFor="let option of productQuality"
+            [value]="option.calidad_producto_id"
+          >
             {{ option.descripcion }}
           </mat-option>
         </mat-select>
         <!-- Mostrar componente de carga -->
-        <mat-progress-spinner *ngIf="showLoadingProductQuality" matSuffix mode="indeterminate" value="100"
-          diameter="20">
+        <mat-progress-spinner
+          *ngIf="showLoadingProductQuality"
+          matSuffix
+          mode="indeterminate"
+          value="100"
+          diameter="20"
+        >
         </mat-progress-spinner>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('calidad_producto_id')">
@@ -109,7 +163,13 @@
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Área Producción</mat-label>
-        <input type="text" formControlName="area_produccion" matInput placeholder="Área Producción" required>
+        <input
+          type="text"
+          formControlName="area_produccion"
+          matInput
+          placeholder="Área Producción"
+          required
+        />
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('area_produccion')">
           {{ getErrorMessage("area_produccion") }}
@@ -118,7 +178,13 @@
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Área Desarrollo</mat-label>
-        <input type="text" formControlName="area_desarrollo" matInput placeholder="Área Desarrollo" required>
+        <input
+          type="text"
+          formControlName="area_desarrollo"
+          matInput
+          placeholder="Área Desarrollo"
+          required
+        />
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('area_desarrollo')">
           {{ getErrorMessage("area_desarrollo") }}
@@ -128,12 +194,21 @@
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Tipo Cultivo</mat-label>
         <mat-select formControlName="tipo_cultivo_id" required>
-          <mat-option *ngFor="let option of cropTypes" [value]="option.tipo_cultivo_id">
+          <mat-option
+            *ngFor="let option of cropTypes"
+            [value]="option.tipo_cultivo_id"
+          >
             {{ option.descripcion }}
           </mat-option>
         </mat-select>
         <!-- Mostrar componente de carga -->
-        <mat-progress-spinner *ngIf="showLoadingCropTypes" matSuffix mode="indeterminate" value="100" diameter="20">
+        <mat-progress-spinner
+          *ngIf="showLoadingCropTypes"
+          matSuffix
+          mode="indeterminate"
+          value="100"
+          diameter="20"
+        >
         </mat-progress-spinner>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('tipo_cultivo_id')">
@@ -146,9 +221,9 @@
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Edad Cultivo</mat-label>
         <mat-select formControlName="edad_cultivo" required>
-          <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{ food.viewValue }}
-                          </mat-option> -->
+          <mat-option *ngFor="let option of cropAge" [value]="option">
+            {{ option }}
+          </mat-option>
         </mat-select>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('edad_cultivo')">
@@ -158,7 +233,13 @@
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Toneladas por Ha</mat-label>
-        <input type="text" formControlName="ton_hectarea" matInput placeholder="Toneladas por Ha" required>
+        <input
+          type="text"
+          formControlName="ton_hectarea"
+          matInput
+          placeholder="Toneladas por Ha"
+          required
+        />
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('ton_hectarea')">
           {{ getErrorMessage("ton_hectarea") }}
@@ -167,8 +248,14 @@
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Venta Estimada</mat-label>
-        <input matInput type="number" formControlName="venta_estimada" class="example-right-align"
-          placeholder="Venta Estimada" required>
+        <input
+          matInput
+          type="number"
+          formControlName="venta_estimada"
+          class="example-right-align"
+          placeholder="Venta Estimada"
+          required
+        />
         <span matPrefix>$&nbsp;</span>
         <span matSuffix>.00</span>
         <!-- Mostrar validación de error -->
@@ -180,9 +267,8 @@
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Predio Exportador</mat-label>
         <mat-select formControlName="predio_exportador" required>
-          <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{ food.viewValue }}
-                          </mat-option> -->
+          <mat-option [value]="'s'"> Si </mat-option>
+          <mat-option [value]="'n'"> No </mat-option>
         </mat-select>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('predio_exportador')">
@@ -191,13 +277,17 @@
       </mat-form-field>
     </div>
 
-
     <h2 class="spacer" mat-dialog-title>Datos Cosecha</h2>
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
       <mat-form-field appearance="fill" fxFlex="0 1calc(33.3% - 32px)">
         <mat-label>Peso Cosecha Anterior</mat-label>
-        <input matInput type="number" formControlName="peso_ultima_cosecha" class="example-right-align"
-          placeholder="Peso Cosecha Anterior">
+        <input
+          matInput
+          type="number"
+          formControlName="peso_ultima_cosecha"
+          class="example-right-align"
+          placeholder="Peso Cosecha Anterior"
+        />
         <span matPrefix>
           <mat-icon> terrain</mat-icon>
         </span>
@@ -211,7 +301,12 @@
 
       <mat-form-field appearance="fill" fxFlex="0 1 calc(33.3% - 32px)">
         <mat-label>Fecha Esperada de Inicio Cosecha</mat-label>
-        <input formControlName="fecha_esperada_cosecha" matInput [matDatepicker]="dp">
+        <input
+          formControlName="fecha_esperada_cosecha"
+          [value]="cultureForm.get('fecha_esperada_cosecha').value"
+          matInput
+          [matDatepicker]="dp"
+        />
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
         <!-- Mostrar validación de error -->
@@ -221,12 +316,17 @@
       </mat-form-field>
     </div>
 
-
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Peso Esperado Cosecha Actual</mat-label>
-        <input matInput type="number" formControlName="ton_producidas" class="example-right-align"
-          placeholder="Peso Cosecha Anterior" required>
+        <input
+          matInput
+          type="number"
+          formControlName="ton_producidas"
+          class="example-right-align"
+          placeholder="Peso Cosecha Anterior"
+          required
+        />
         <span matPrefix>
           <mat-icon> terrain</mat-icon>
         </span>
@@ -239,12 +339,15 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Calidad</mat-label>
-        <mat-select formControlName="calidad_producto_id_2" required>
-          <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{ food.viewValue }}
-                          </mat-option> -->
-        </mat-select>
+        <mat-label>Calidad Producto</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="calidad_producto_id_2"
+          class="example-right-align"
+          placeholder="Calidad producto"
+          [value]="cultureForm.get('calidad_producto_id_2').value"
+        />
       </mat-form-field>
 
       <button type="button" mat-fab color="accent" (click)="onTest()">
@@ -252,39 +355,81 @@
       </button>
     </div>
 
-
-    <div class="spacer" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" fxFlex>
+    <div
+      class="spacer"
+      fxLayout="row wrap"
+      fxLayoutGap="32px"
+      fxLayoutAlign="flex-start"
+    >
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+        fxFlex
+      >
         <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> Fecha. </th>
-          <td mat-cell *matCellDef="let element"> {{ element.date }} </td>
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let element">{{ element.date }}</td>
         </ng-container>
 
         <ng-container matColumnDef="quality">
-          <th mat-header-cell *matHeaderCellDef> Calidad. </th>
-          <td mat-cell *matCellDef="let element"> {{ element.quality }} </td>
+          <th mat-header-cell *matHeaderCellDef>Calidad</th>
+          <td mat-cell *matCellDef="let element">{{ element.quality }}</td>
         </ng-container>
 
         <ng-container matColumnDef="tons">
-          <th mat-header-cell *matHeaderCellDef> Toneladas. </th>
-          <td mat-cell *matCellDef="let element"> {{ element.tons }} </td>
+          <th mat-header-cell *matHeaderCellDef>Toneladas</th>
+          <td mat-cell *matCellDef="let element">{{ element.tons }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              (click)="rmHarvest(element)"
+              type="button"
+              class="remove-harvest-btn"
+              mat-mini-fab
+              aria-label="Eliminar"
+            >
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
 
-    <div class="spacer spacer-bt" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <button [disabled]="cultureForm.invalid" type="submit" mat-raised-button color="primary" class="btn-block" fxFlex>
+    <div
+      class="spacer spacer-bt"
+      fxLayout="row wrap"
+      fxLayoutGap="32px"
+      fxLayoutAlign="flex-start"
+    >
+      <button
+        [disabled]="cultureForm.invalid"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="btn-block"
+        fxFlex
+      >
         <span>Guardar y Cerrar</span>
         <!-- <div  fxLayout="row" fxLayoutAlign="center center" class="spinner">
                 <mat-progress-spinner mode="indeterminate" value="100" diameter="20"></mat-progress-spinner>
               </div> -->
       </button>
 
-      <button [disabled]="true" type="button" mat-stoked-button color="primary" class="btn-block" fxFlex>
+      <button
+        [disabled]="true"
+        type="button"
+        mat-stoked-button
+        color="primary"
+        class="btn-block"
+        fxFlex
+      >
         <span>Datos Visita</span>
       </button>
     </div>
