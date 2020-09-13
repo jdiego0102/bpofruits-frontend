@@ -7,12 +7,17 @@
   .profile-card {
     text-align: center;
     padding: 0 20px 20px 20px;
+    object-fit: cover;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
   }
 
   img {
-    width: 100px;
-    height: 100px;
-    object-fit: scale-down;
+    margin-top: 10px;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
     border-radius: 20%;
   }
 }
