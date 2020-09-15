@@ -1,15 +1,16 @@
 import {
   Component,
   OnInit,
-  Inject,
   TemplateRef,
   Input,
   OnDestroy,
 } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import {
+  CropResponse,
   CropType,
   CropTypeResponse,
+  Culture,
   Harvest,
 } from '../../../models/culture.interface';
 import { PredioService } from 'src/app/services/predio/predio.service';
@@ -27,7 +28,7 @@ import {
   ProducQuality,
 } from '../../../models/product.interface';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { map, startWith, tap } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 /* Format datePicker  */
 import {
   MomentDateAdapter,
@@ -74,6 +75,8 @@ export const MY_FORMATS = {
 export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Controlar subscripciones y se debe inicializar
   private subscription: Subscription = new Subscription();
+  // Spinner de carga
+  isLoading = false;
   // Cargando predios
   showLoadingStates = false;
   // Cargando tipos de productos
@@ -110,7 +113,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   // Formulario
   cultureForm: FormGroup;
   // Columnas datatable cosecha
-  displayedColumns: string[] = ['date', 'quality', 'tons', 'actions'];
+  displayedColumns: string[] = ['index', 'date', 'quality', 'tons', 'actions'];
   // Array cosecha
   HARVEST_DATA: Harvest[] = [];
   dataSource = this.HARVEST_DATA;
@@ -237,11 +240,11 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   }
 
   onTest(): void {
-    // Obtener valores de fecha y formatear
+    // Obtener valores de fecha
     let datePicker = this.cultureForm.get('fecha_esperada_cosecha').value._d;
 
     // Establecer valores para objeto de la cosecha.
-    let harvestDate = this.datePipe.transform(datePicker, 'yyyy-MM-dd');
+    let harvestDate = this.datePipe.transform(datePicker, 'yyyy-MM-dd'); // Formatear valor de datepicker con datpipe
     let harvestQuality = this.productQualitySelected.descripcion;
     let tons = this.cultureForm.get('ton_producidas').value;
 
@@ -253,6 +256,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
         tons: tons,
       })
     );
+    // Refrescar datos de la tabla.
     this.dataSource = [...this.dataSource];
   }
 
@@ -422,9 +426,62 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSaveCrop(): void {}
+  // Eliminar cosecha del array
+  rmHarvest(index: number): void {
+    // Remover del array
+    this.dataSource.splice(index, 1);
 
-  rmHarvest(element: Harvest): void {
-    console.log(element);
+    // Refrescar datos de la tabla.
+    this.dataSource = [...this.dataSource];
+  }
+
+  // Guardar datos del cultivo
+  onSaveCrop(): void {
+    // Activar spinner de carga.
+    this.isLoading = true;
+    // Obtener valores del formulario
+    this.cultureForm;
+    let formValue: Culture = this.cultureForm.value;
+
+    formValue = {
+      predio_id: formValue.predio_id,
+      producto_id: formValue.producto_id['producto_id'],
+      calidad_producto_id: formValue.calidad_producto_id,
+      area_produccion: formValue.area_produccion,
+      area_desarrollo: formValue.area_desarrollo,
+      ton_hectarea: formValue.ton_hectarea,
+      venta_estimada: formValue.venta_estimada,
+      edad_cultivo: formValue.edad_cultivo,
+      tipo_cultivo_id: formValue.tipo_cultivo_id,
+      peso_ultima_cosecha: formValue.peso_ultima_cosecha,
+      predio_exportador: formValue.predio_exportador,
+      created_by: localStorage.getItem('username'),
+      cosecha: this.dataSource,
+    };
+
+    this.subscription.add(
+      // Enviar datos al servicio y obtener respuesta del servidor
+      this.cropService.saveCrop(formValue).subscribe((res: CropResponse) => {
+        if (res) {
+          if (res.status == 'success') {
+            // Mostrar notificación
+            this.toastr.success(res.msg, res.title, {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.isLoading = false;
+            // Cerrar diálogo
+            this.dialogRef.close();
+          } else {
+            // Mostrar notificación
+            this.toastr.error(res.msg, res.title, {
+              timeOut: 7000,
+              progressBar: true,
+            });
+            this.isLoading = false;
+          }
+        }
+      })
+    );
   }
 }

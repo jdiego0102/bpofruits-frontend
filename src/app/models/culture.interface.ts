@@ -11,7 +11,7 @@ export interface CropType {
 }
 
 export interface Culture {
-  predio_id: number;
+  predio_id?: number;
   producto_id: number;
   calidad_producto_id: number;
   area_produccion: number;
@@ -22,6 +22,14 @@ export interface Culture {
   tipo_cultivo_id: number;
   peso_ultima_cosecha: number;
   predio_exportador: string;
+  created_by?: string;
+  cosecha: Harvest[];
+}
+
+export interface CropResponse {
+  status: string;
+  title?: string;
+  msg?: string;
 }
 
 export interface CropTypeResponse {
