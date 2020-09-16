@@ -43,6 +43,7 @@ import {
 import * as _moment from 'moment';
 import { defaultFormat as _rollupMoment } from 'moment';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -129,7 +130,8 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private _adapter: DateAdapter<any>,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {
     this._adapter.setLocale('es');
   }
@@ -239,7 +241,7 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  onTest(): void {
+  onAddHarvest(): void {
     // Obtener valores de fecha
     let datePicker = this.cultureForm.get('fecha_esperada_cosecha').value._d;
 

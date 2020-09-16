@@ -6,10 +6,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MatModule } from '../mat/mat.module';
 
 import { RouterModule } from '@angular/router';
-import { CreateCropDialogComponent } from './components/create-crop-dialog/create-crop-dialog.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, SidebarComponent, CreateCropDialogComponent],
+  declarations: [HeaderComponent, FooterComponent, SidebarComponent],
   imports: [CommonModule, RouterModule, MatModule],
   exports: [HeaderComponent, FooterComponent, SidebarComponent],
 })

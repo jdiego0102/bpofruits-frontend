@@ -37,7 +37,6 @@ export class CropService {
 
   // Realizar petición al servidor para guardar almacenar cultivo
   saveCrop(culture: Culture): Observable<CropResponse | void> {
-    console.log(culture);
     return this.http
       .post<CropResponse>(`${environment.API_URL}culture/create`, culture, {
         headers: this.headers,

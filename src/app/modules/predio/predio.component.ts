@@ -243,8 +243,6 @@ export class PredioComponent implements OnInit, OnDestroy {
           if (res.status == 'success') {
             this.objPredio = res.predio[0];
 
-            console.log(this.objPredio.nombre_vereda);
-
             // Asignar valores del objeto los inputs del formulario
             this.predioForm.controls['nombre_predio'].setValue(
               this.objPredio.nombre_predio

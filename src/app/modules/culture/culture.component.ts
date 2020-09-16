@@ -4,14 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CropService } from 'src/app/services/culture/crop.service';
 import { CreateCropDialogComponent } from 'src/app/shared/components/create-crop-dialog/create-crop-dialog.component';
-import {
-  CropResponse,
-  CropType,
-  CropTypeResponse,
-  Culture,
-  Harvest,
-  ShowCrops,
-} from '../../models/culture.interface';
+import { CropResponse, ShowCrops } from '../../models/culture.interface';
 
 @Component({
   selector: 'app-culture',
@@ -25,7 +18,6 @@ export class CultureComponent implements OnInit, OnDestroy {
   showProgressBar = false;
   // Columnas datatable cultivo
   displayedColumns: string[] = [
-    'index',
     'predio',
     'productQuality',
     'product',
@@ -56,7 +48,11 @@ export class CultureComponent implements OnInit, OnDestroy {
   openDialogCreateCrop(): void {
     const dialog = this.dialogCreateCrop.open(CreateCropDialogComponent);
 
-    dialog.afterClosed().subscribe((crop) => {});
+    dialog.afterClosed().subscribe((cropDialog) => {
+      if (cropDialog == true || cropDialog == undefined) {
+        this.onGetPredio();
+      }
+    });
   }
 
   // Obtener datos del predio por usuario
@@ -68,6 +64,7 @@ export class CultureComponent implements OnInit, OnDestroy {
         if (res) {
           if (res.status == 'success') {
             this.dataSource = res.crops;
+
             this.showProgressBar = false;
           } else {
             // Mostrar notificación
