@@ -17,6 +17,9 @@ export class CropService {
     'Content-Type': 'application/json; charset=utf-8',
   });
 
+  // Obtener el usuario id
+  user_id: number = Number(localStorage.getItem('user_id'));
+
   constructor(private http: HttpClient) {}
 
   // Obtener tipos de cultivo
@@ -39,6 +42,22 @@ export class CropService {
       .post<CropResponse>(`${environment.API_URL}culture/create`, culture, {
         headers: this.headers,
       })
+      .pipe(
+        map((res: CropResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Consultar cultivo por usuario
+  getPredio(): Observable<CropResponse | void> {
+    return this.http
+      .get<CropResponse>(
+        `${environment.API_URL}culture/list/${this.user_id}`,
+        {}
+      )
       .pipe(
         map((res: CropResponse) => {
           return res;

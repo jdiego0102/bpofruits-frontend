@@ -1,7 +1,7 @@
 // Datos de cosecha.
 export interface Harvest {
   date: string;
-  quality: string;
+  quality?: string;
   tons: number;
 }
 
@@ -26,10 +26,21 @@ export interface Culture {
   cosecha: Harvest[];
 }
 
+export interface ShowCrops {
+  predio: string;
+  calidad_producto: string;
+  producto: string;
+  variedad: string;
+  tipo_cultivo: string;
+  edad_cultivo: number;
+  cosechas: Harvest[];
+}
+
 export interface CropResponse {
   status: string;
   title?: string;
   msg?: string;
+  crops?: ShowCrops[];
 }
 
 export interface CropTypeResponse {
