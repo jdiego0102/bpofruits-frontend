@@ -11,7 +11,7 @@
       <span class="loadingText">Cargando...</span>
     </div>
 
-    <div class="spacer" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Nombre predio</mat-label>
@@ -43,10 +43,32 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Contacto</mat-label>
         <input type="text" formControlName="contacto" matInput placeholder="Contacto" required>
+        <mat-icon matSuffix>contacts</mat-icon>
+        <!-- Mostrar validación de error -->
+        <mat-error *ngIf="isValidField('contacto')">
+          {{ getErrorMessage("contacto") }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Tipo documento</mat-label>
+        <mat-select required>
+          <mat-option [value]="'s'"> Si </mat-option>
+          <mat-option [value]="'n'"> No </mat-option>
+        </mat-select>
+        <!-- Mostrar validación de error -->
+        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
+          {{ getErrorMessage("predio_exportador") }}
+        </mat-error> -->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Documento</mat-label>
+        <input type="text" matInput placeholder="Contacto" required>
         <mat-icon matSuffix>contacts</mat-icon>
         <!-- Mostrar validación de error -->
         <mat-error *ngIf="isValidField('contacto')">
@@ -65,7 +87,7 @@
       </mat-form-field>
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Propietario</mat-label>
@@ -77,19 +99,56 @@
         </mat-error>
       </mat-form-field>
 
-      <div fxLaout="column" fxLayoutGap="20px">
-        <mat-form-field appearance="fill" fxFlex>
-          <mat-label>Cuenta</mat-label>
-          <input type="text" formControlName="cuenta" matInput placeholder="Cuenta">
-          <mat-icon matSuffix>account_balance</mat-icon>
-        </mat-form-field>
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Tipo documento</mat-label>
+        <mat-select required>
+          <mat-option [value]="'s'"> Si </mat-option>
+          <mat-option [value]="'n'"> No </mat-option>
+        </mat-select>
+        <!-- Mostrar validación de error -->
+        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
+          {{ getErrorMessage("predio_exportador") }}
+        </mat-error> -->
+      </mat-form-field>
 
-        <mat-form-field appearance="fill" fxFlex>
-          <mat-label>RUT</mat-label>
-          <input type="text" formControlName="rut" matInput placeholder="RUT">
-          <mat-icon matSuffix>assignment</mat-icon>
-        </mat-form-field>
-      </div>
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Documento</mat-label>
+        <input type="text" matInput placeholder="Contacto" required>
+        <mat-icon matSuffix>contacts</mat-icon>
+        <!-- Mostrar validación de error -->
+        <mat-error *ngIf="isValidField('contacto')">
+          {{ getErrorMessage("contacto") }}
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Cuenta bancaria</mat-label>
+        <mat-select required>
+          <mat-option [value]="'s'"> Si </mat-option>
+          <mat-option [value]="'n'"> No </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>account_balance</mat-icon>
+        <!-- Mostrar validación de error -->
+        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
+          {{ getErrorMessage("predio_exportador") }}
+        </mat-error> -->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>RUT</mat-label>
+        <mat-select required>
+          <mat-option [value]="'s'"> Si </mat-option>
+          <mat-option [value]="'n'"> No </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>assignment</mat-icon>
+        <!-- Mostrar validación de error -->
+        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
+          {{ getErrorMessage("predio_exportador") }}
+        </mat-error> -->
+      </mat-form-field>
 
     </div>
 

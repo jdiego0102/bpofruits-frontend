@@ -23,7 +23,7 @@ export class CultureComponent implements OnInit, OnDestroy {
     'product',
     'cropType',
     'cropAge',
-    'actions',
+    // 'actions',
   ];
   // Array cultivo
   CROP_DATA: ShowCrops[] = [];
