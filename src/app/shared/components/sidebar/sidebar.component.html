@@ -1,16 +1,12 @@
 <mat-nav-list>
   <div fxLayout="row" fxLayoutAlign="space-around center">
     <mat-card class="profile-card mat-elevation-z8">
-
-      <img src="assets/img/fruits.png" alt="Image">
+      <img src="assets/img/fruits.png" alt="Image" />
 
       <mat-card-header>
         <mat-card-title>{{ username }}</mat-card-title>
-        <mat-card-subtitle>{{ email }}
-
-        </mat-card-subtitle>
+        <mat-card-subtitle>{{ email }} </mat-card-subtitle>
       </mat-card-header>
-
     </mat-card>
   </div>
 
@@ -18,41 +14,7 @@
 
   <h2 matSubheader>Menú</h2>
 
-  <span *ngFor="let item of menu">
-    <span *ngIf="item.children && item.children.length > 0">
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <!-- Cabecera submenú -->
-              <div fxLayout="row" fxLayoutAlign="space-between center">
-                <mat-icon>{{ item.iconName }}</mat-icon>
-                {{ item.displayName }}
-              </div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <span *ngFor="let child of item.children">
-            <mat-list-item [routerLink]="[child.route]">
-              <!-- Entrada de cada submenú -->
-              <div fxLayout="row" fxLayoutAlign="space-between center">
-                <mat-icon>{{ child.iconName }}</mat-icon>
-                {{ child.displayName }}
-              </div>
-            </mat-list-item>
-          </span>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </span>
-    <!-- Cabecera sin submenú -->
-    <span *ngIf="!item.children || item.children.length === 0">
-      <mat-list-item [routerLink]="[item.route]">
-        <!-- Entradas principales -->
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <mat-icon>{{ item.iconName }}</mat-icon>
-          {{ item.displayName }}
-        </div>
-      </mat-list-item>
-    </span>
-  </span>
-
+  <mat-nav-list>
+    <app-menu-list-item *ngFor="let item of menu" [item]="item"></app-menu-list-item>
+  </mat-nav-list>
 </mat-nav-list>

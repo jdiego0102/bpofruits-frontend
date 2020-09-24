@@ -6,9 +6,10 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MatModule } from '../mat/mat.module';
 
 import { RouterModule } from '@angular/router';
+import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, SidebarComponent],
+  declarations: [HeaderComponent, FooterComponent, SidebarComponent, MenuListItemComponent],
   imports: [CommonModule, RouterModule, MatModule],
   exports: [HeaderComponent, FooterComponent, SidebarComponent],
 })

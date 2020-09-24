@@ -27,44 +27,42 @@ export class SidebarComponent implements OnInit {
         route: '/admin',
       },
       {
-        displayName: 'Predio',
-        iconName: 'terrain',
+        displayName: 'Productores',
+        iconName: 'how_to_reg',
         // route: '/predio',
         children: [
           {
-            displayName: 'Crear Predio',
-            iconName: 'add_circle_outline',
-            route: '/predios-list',
+            displayName: 'Predio',
+            iconName: 'verified_user',
+            // route: '/predios-list',
+            children: [
+              {
+                displayName: 'Ver Predios',
+                iconName: 'list_alt',
+                route: '/predio',
+              },
+            ],
           },
           {
-            displayName: 'Ver Predios (Admin)',
-            iconName: 'list_alt',
-            route: '/predios-list',
+            displayName: 'Cultivos',
+            iconName: 'local_florist',
+            // route: '/crops',
+            children: [
+              {
+                displayName: 'Ver Cultivos',
+                iconName: 'list_alt',
+                route: '/crops',
+              },
+              {
+                displayName: 'Info. Técnica Cultivo',
+                iconName: 'assignment',
+                route: '/infoTec',
+              },
+            ],
           },
         ],
       },
-      {
-        displayName: 'Cultivos',
-        iconName: 'local_florist',
-        // route: '/crops',
-        children: [
-          {
-            displayName: 'Crear Cultivo',
-            iconName: 'note_add',
-            route: '/crops',
-          },
-          {
-            displayName: 'Info. Técnica Cultivo',
-            iconName: 'assignment',
-            route: '/infoTec',
-          },
-          {
-            displayName: 'Ver Cultivos (Admin)',
-            iconName: 'note_add',
-            route: '/crops',
-          },
-        ],
-      },
+
       {
         displayName: 'Cuenta',
         iconName: 'account_box',
