@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Predio, PredioResponse } from '../../models/predio.interface';
+import {
+  AccessRoadsResponse,
+  DocumentTypeResponse,
+  Predio,
+  PredioResponse,
+} from '../../models/predio.interface';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
@@ -47,6 +52,7 @@ export class PredioService {
       )
       .pipe(
         map((res: PredioResponse) => {
+          console.log(res);
           return res;
         }),
         // Capturar error
@@ -76,7 +82,11 @@ export class PredioService {
     predio = {
       nombre_predio: predio.nombre_predio,
       contacto: predio.contacto,
+      tipo_doc_contacto: predio.tipo_doc_contacto,
+      nro_doc_contacto: predio.nro_doc_contacto,
       representante_legal: predio.representante_legal,
+      tipo_doc_propietario: predio.tipo_doc_propietario,
+      nro_doc_propietario: predio.nro_doc_propietario,
       telefono1: predio.telefono1,
       telefono2: predio.telefono2,
       vereda_id: Number(predio.vereda_id),
@@ -88,6 +98,7 @@ export class PredioService {
       observaciones: predio.observaciones,
       created_by: localStorage.getItem('username'),
       user_id: this.user_id,
+      estado_via_acceso: predio.estado_via_acceso,
     };
 
     return this.http
@@ -105,6 +116,32 @@ export class PredioService {
 
   // Realizar petición al servidor para actualizar predio
   updatePredio(predio_id: number): void {}
+
+  // Consultar predios por usuario
+  getDocumentType(): Observable<DocumentTypeResponse | void> {
+    return this.http
+      .get<DocumentTypeResponse>(`${environment.API_URL}documentType/id`, {})
+      .pipe(
+        map((res: DocumentTypeResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Consultar vías de acceso
+  getAccessRoads(): Observable<AccessRoadsResponse | void> {
+    return this.http
+      .get<AccessRoadsResponse>(`${environment.API_URL}accessRoads/list`, {})
+      .pipe(
+        map((res: AccessRoadsResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
 
   // Controlar errores  de inicio de sesión
   handlerError(err: any): Observable<never> {

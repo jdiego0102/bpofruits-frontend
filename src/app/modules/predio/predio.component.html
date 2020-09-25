@@ -3,7 +3,8 @@
   <form [formGroup]="predioForm" (ngSubmit)="onSavePredio()">
 
     <div class="aligned-with-icon">
-      <mat-icon>verified_user</mat-icon><span class="aligned-with-icon">Crear predio</span>
+      <mat-icon>verified_user</mat-icon><span class="aligned-with-icon">Crear
+        predio</span>
     </div>
 
     <div *ngIf="showProgressBar">
@@ -12,7 +13,6 @@
     </div>
 
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Nombre predio</mat-label>
         <input type="text" formControlName="nombre_predio" matInput placeholder="Nombre predio" required>
@@ -55,24 +55,25 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Tipo documento</mat-label>
-        <mat-select required>
-          <mat-option [value]="'s'"> Si </mat-option>
-          <mat-option [value]="'n'"> No </mat-option>
+        <mat-label>Tipo documento contacto</mat-label>
+        <mat-select formControlName="tipo_doc_contacto" required>
+          <mat-option *ngFor="let option of documentsTypes" [value]="option.tipo_documento_id">
+            {{ option.descripcion }}
+          </mat-option>
         </mat-select>
         <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
-          {{ getErrorMessage("predio_exportador") }}
-        </mat-error> -->
+        <mat-error *ngIf="isValidField('tipo_doc_contacto')">
+          {{ getErrorMessage("tipo_doc_contacto") }}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Documento</mat-label>
-        <input type="text" matInput placeholder="Contacto" required>
-        <mat-icon matSuffix>contacts</mat-icon>
+        <mat-label>N° Documento Contacto</mat-label>
+        <input type="text" formControlName="nro_doc_contacto" matInput placeholder=" N° Documento Contacto" required>
+        <mat-icon matSuffix>portrait</mat-icon>
         <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('contacto')">
-          {{ getErrorMessage("contacto") }}
+        <mat-error *ngIf="isValidField('nro_doc_contacto')">
+          {{ getErrorMessage("nro_doc_contacto") }}
         </mat-error>
       </mat-form-field>
 
@@ -88,7 +89,6 @@
     </div>
 
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Propietario</mat-label>
         <input type="text" formControlName="representante_legal" matInput placeholder="Propietario" required>
@@ -100,24 +100,26 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Tipo documento</mat-label>
-        <mat-select required>
-          <mat-option [value]="'s'"> Si </mat-option>
-          <mat-option [value]="'n'"> No </mat-option>
+        <mat-label>Tipo documento propietario</mat-label>
+        <mat-select formControlName="tipo_doc_propietario" required>
+          <mat-option *ngFor="let option of documentsTypes" [value]="option.tipo_documento_id">
+            {{ option.descripcion }}
+          </mat-option>
         </mat-select>
         <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
-          {{ getErrorMessage("predio_exportador") }}
-        </mat-error> -->
+        <mat-error *ngIf="isValidField('tipo_doc_propietario')">
+          {{ getErrorMessage("tipo_doc_propietario") }}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Documento</mat-label>
-        <input type="text" matInput placeholder="Contacto" required>
-        <mat-icon matSuffix>contacts</mat-icon>
+        <mat-label>N° Documento Propietario</mat-label>
+        <input type="text" formControlName="nro_doc_propietario" matInput placeholder="N° Documento Propietario"
+          required>
+        <mat-icon matSuffix>portrait</mat-icon>
         <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('contacto')">
-          {{ getErrorMessage("contacto") }}
+        <mat-error *ngIf="isValidField('nro_doc_propietario')">
+          {{ getErrorMessage("nro_doc_propietario") }}
         </mat-error>
       </mat-form-field>
 
@@ -126,36 +128,37 @@
     <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>Cuenta bancaria</mat-label>
-        <mat-select required>
+        <mat-select formControlName="cuenta" required>
           <mat-option [value]="'s'"> Si </mat-option>
           <mat-option [value]="'n'"> No </mat-option>
         </mat-select>
-        <mat-icon matSuffix>account_balance</mat-icon>
+        <!-- <mat-icon matSuffix>account_balance</mat-icon> -->
         <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
-          {{ getErrorMessage("predio_exportador") }}
+        <!-- <mat-error *ngIf="isValidField('cuenta')">
+          {{ getErrorMessage("cuenta") }}
         </mat-error> -->
       </mat-form-field>
 
       <mat-form-field appearance="fill" fxFlex>
         <mat-label>RUT</mat-label>
-        <mat-select required>
+        <mat-select formControlName="rut" required>
           <mat-option [value]="'s'"> Si </mat-option>
           <mat-option [value]="'n'"> No </mat-option>
         </mat-select>
-        <mat-icon matSuffix>assignment</mat-icon>
+        <!-- <mat-icon matSuffix>assignment</mat-icon> -->
         <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('predio_exportador')">
-          {{ getErrorMessage("predio_exportador") }}
+        <!-- <mat-error *ngIf="isValidField('rut')">
+          {{ getErrorMessage("rut") }}
         </mat-error> -->
       </mat-form-field>
 
     </div>
 
 
-    <div class="spacer">
+    <div class="aligned-with-icon spacer">
       <mat-icon>location_on</mat-icon><span class="aligned-with-icon">Ubicación</span>
     </div>
+
     <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="department" #department="matAutocomplete"-->
     <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
       <mat-form-field class="example-full-width" appearance="fill" fxFlex>
@@ -213,6 +216,23 @@
           {{ getErrorMessage("vereda_id") }}
         </mat-error>
       </mat-form-field>
+
+
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+      <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Estado Vía de Acceso</mat-label>
+        <mat-select formControlName="estado_via_acceso" required>
+          <mat-option *ngFor="let option of accessRoads" [value]="option.via_acceso_id">
+            {{ option.descripcion }}
+          </mat-option>
+        </mat-select>
+        <!-- Mostrar validación de error -->
+        <mat-error *ngIf="isValidField('estado_via_acceso')">
+          {{ getErrorMessage("estado_via_acceso") }}
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="spacer textArea" fxLayout="column">
@@ -238,8 +258,8 @@
     </div>
   </form>
 
-  <button mat-mini-fab color="warn" aria-label="Example icon button with a home icon" class="custom-button"
-    (click)="updatingData()">
+  <button mat-mini-fab color="warn" aria-label="Example icon button with a home
+    icon" class="custom-button" (click)="updatingData()">
     <mat-icon>edit</mat-icon>
   </button>
 

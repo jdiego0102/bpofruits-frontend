@@ -12,7 +12,13 @@ import { DepartmentService } from '../../services/department/department.service'
 import { CityService } from '../../services/city/city.service';
 import { SidewalkService } from '../../services/sidewalk/sidewalk.service';
 import { ToastrService } from 'ngx-toastr';
-import { PredioResponse } from 'src/app/models/predio.interface';
+import {
+  AccessRoads,
+  AccessRoadsResponse,
+  DocumentType,
+  DocumentTypeResponse,
+  PredioResponse,
+} from 'src/app/models/predio.interface';
 import {
   DepartmentResponse,
   Department,
@@ -42,6 +48,10 @@ export class PredioComponent implements OnInit, OnDestroy {
   showLoadingCity = false;
   // Cargando departamento
   showLoadingSideWalk = false;
+  // Cargando número de documento
+  showLoadingDocumentType = false;
+  // Cargando estados vías de acceso
+  showLoadingAccessRoads = false;
 
   // Mostrar/Ocultar formulario del actor.
   isUpdatingData: boolean = false;
@@ -76,6 +86,11 @@ export class PredioComponent implements OnInit, OnDestroy {
   // Objeto predio
   objPredio: any = {};
 
+  // Array tipos de documentos
+  documentsTypes: DocumentType[] = [];
+  // Array estados vías de acceso
+  accessRoads: AccessRoads[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -93,14 +108,19 @@ export class PredioComponent implements OnInit, OnDestroy {
       telefono1: ['', [Validators.required]],
       telefono2: [''],
       contacto: ['', [Validators.required]],
+      tipo_doc_contacto: ['', [Validators.required]],
+      nro_doc_contacto: ['', [Validators.required]],
       correo: ['', Validators.pattern(this.isValidEmail)],
       representante_legal: ['', [Validators.required]],
+      tipo_doc_propietario: ['', [Validators.required]],
+      nro_doc_propietario: ['', [Validators.required]],
       cuenta: [''],
       rut: [''],
       departamento_id: ['', [Validators.required]],
       ciudad_id: ['', [Validators.required]],
       vereda_id: ['', [Validators.required]],
       observaciones: [''],
+      estado_via_acceso: ['', [Validators.required]],
     });
 
     // Inicializar campos deshabilitados
@@ -146,7 +166,11 @@ export class PredioComponent implements OnInit, OnDestroy {
     this.predioForm.controls['departamento_id'].disable();
     this.predioForm.controls['ciudad_id'].disable();
     this.predioForm.controls['vereda_id'].disable();
+    this.predioForm.controls['tipo_doc_propietario'].disable();
+    this.predioForm.controls['tipo_doc_contacto'].disable();
     this.onGetPredio();
+    this.onGetDocumentsType();
+    this.onGetAccessRoads();
   }
 
   // Filtrar departamentos
@@ -268,6 +292,22 @@ export class PredioComponent implements OnInit, OnDestroy {
             this.predioForm.controls['observaciones'].setValue(
               this.objPredio.observaciones
             );
+            this.predioForm.controls['tipo_doc_contacto'].setValue(
+              this.objPredio.tipo_doc_contacto
+            );
+            this.predioForm.controls['nro_doc_contacto'].setValue(
+              this.objPredio.nro_doc_contacto
+            );
+            this.predioForm.controls['tipo_doc_propietario'].setValue(
+              this.objPredio.tipo_doc_propietario
+            );
+            this.predioForm.controls['nro_doc_propietario'].setValue(
+              this.objPredio.nro_doc_propietario
+            );
+            this.predioForm.controls['estado_via_acceso'].setValue(
+              this.objPredio.via_acceso_id
+            );
+
             this.showProgressBar = false;
           } else {
             // Mostrar notificación
@@ -440,8 +480,6 @@ export class PredioComponent implements OnInit, OnDestroy {
   updatingData(): void {
     this.isUpdatingData = !this.isUpdatingData;
 
-    // this.onGetDepartments();
-
     // Habilitar/Deshabilitar campos del formulario
     if (this.isUpdatingData == true) {
       this.onGetDepartments();
@@ -449,5 +487,65 @@ export class PredioComponent implements OnInit, OnDestroy {
     } else {
       this.predioForm.disable();
     }
+  }
+
+  // Obtener tipos de documentos
+  onGetDocumentsType(): void {
+    this.showLoadingDocumentType = true;
+
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.predioService
+        .getDocumentType()
+        .subscribe((res: DocumentTypeResponse) => {
+          if (res) {
+            if (res.status == 'success') {
+              this.documentsTypes = res.documentType;
+
+              this.showLoadingDocumentType = false;
+              // Habilitar inputs
+              // this.predioForm.controls['tipo_doc_propietario'].enable();
+              // this.predioForm.controls['tipo_doc_contacto'].enable();
+            } else {
+              // Mostrar notificación
+              this.toastr.error(res.msg, res.title, {
+                timeOut: 7000,
+                progressBar: true,
+              });
+              this.showLoadingDocumentType = false;
+            }
+          }
+        })
+    );
+  }
+
+  // Obtener estados vías de acceso
+  onGetAccessRoads(): void {
+    this.showLoadingAccessRoads = true;
+
+    this.subscription.add(
+      // Obtener petición realizada por el servicio
+      this.predioService
+        .getAccessRoads()
+        .subscribe((res: AccessRoadsResponse) => {
+          if (res) {
+            if (res.status == 'success') {
+              this.accessRoads = res.accessRoads;
+
+              this.showLoadingAccessRoads = false;
+              // Habilitar inputs
+              // this.predioForm.controls['tipo_doc_propietario'].enable();
+              // this.predioForm.controls['tipo_doc_contacto'].enable();
+            } else {
+              // Mostrar notificación
+              this.toastr.error(res.msg, res.title, {
+                timeOut: 7000,
+                progressBar: true,
+              });
+              this.showLoadingAccessRoads = false;
+            }
+          }
+        })
+    );
   }
 }
