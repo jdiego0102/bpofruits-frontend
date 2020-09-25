@@ -1,17 +1,17 @@
-@import '../../../../theme.scss';
+// @import '../../../../theme.scss';
 
 :host {
   display: block;
   outline: none;
 
   .mat-list-item.active {
-    background-color: mat-color($my-primary, 50);
+    background-color: #dcedc8;
   }
 
   &:hover,
   &:focus {
     >.mat-list-item:not(.expanded) {
-      background-color: mat-color($my-primary, 100) !important;
+      background-color: #dcedc8 !important;
     }
   }
 }
