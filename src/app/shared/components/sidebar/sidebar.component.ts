@@ -19,8 +19,9 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.menu = JSON.parse(localStorage.getItem('menu'));
     // Menú temporal
-    this.menu = [
+    /* this.menu = [
       {
         displayName: 'Dashboard',
         iconName: 'dashboard',
@@ -68,6 +69,6 @@ export class SidebarComponent implements OnInit {
         iconName: 'account_box',
         route: '/actor',
       },
-    ];
+    ]; */
   }
 }

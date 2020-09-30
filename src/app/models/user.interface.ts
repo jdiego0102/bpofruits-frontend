@@ -1,3 +1,5 @@
+import { MenuItem } from './menuItem.interface';
+
 export interface User {
   name: string;
   email: string;
@@ -13,4 +15,5 @@ export interface UserResponse {
   email: string;
   role: number;
   user: [];
+  menu?: MenuItem[];
 }
