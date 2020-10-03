@@ -139,9 +139,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.onGetStates();
     this.onGetProductTypes();
-    this.onGetProductQuality();
-    this.onGetCropType();
-    this.onGetCropAge();
 
     // Obtener valores del formulario del cultivo y validaciones
     this.cultureForm = this.fb.group({
@@ -149,21 +146,8 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
       tipo_producto_id: ['', [Validators.required]],
       producto_id: ['', [Validators.required]],
       variedad: ['', [Validators.required]],
-      calidad_producto_id: ['', [Validators.required]],
-      area_produccion: ['', [Validators.required]],
-      area_desarrollo: ['', [Validators.required]],
-      tipo_cultivo_id: ['', [Validators.required]],
-      edad_cultivo: ['', [Validators.required]],
-      ton_hectarea: ['', [Validators.required]],
-      venta_estimada: ['', [Validators.required]],
-      predio_exportador: ['', [Validators.required]],
-      peso_ultima_cosecha: ['', [Validators.required]],
-      fecha_esperada_cosecha: ['', [Validators.required]],
-      ton_producidas: ['', [Validators.required]],
-      calidad_producto_id_2: ['', [Validators.required]],
     });
-    // Deshabilitar calidad_proucto (Cambia el valor con el select calidad_producto_id)
-    this.cultureForm.controls['calidad_producto_id_2'].disable();
+
     // Deshabilitar variedad (Cambia al seleccionar la variedad)
     this.cultureForm.controls['variedad'].disable();
     // Deshabilitar variedad (Se activa al contrar datos de productos)
@@ -184,13 +168,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
           nombre ? this._filterProducts(nombre) : this.products.slice()
         )
       );
-
-    // Obtener valor y cambios de calidad producto filtrado
-    this.cultureForm.controls[
-      'calidad_producto_id'
-    ].valueChanges.subscribe((productId) =>
-      this._filterProductQuality(productId)
-    );
   }
 
   // Filtrar productos
@@ -239,27 +216,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
           .toLowerCase()
           .indexOf(filterValue) === 0
     );
-  }
-
-  onAddHarvest(): void {
-    // Obtener valores de fecha
-    let datePicker = this.cultureForm.get('fecha_esperada_cosecha').value._d;
-
-    // Establecer valores para objeto de la cosecha.
-    let harvestDate = this.datePipe.transform(datePicker, 'yyyy-MM-dd'); // Formatear valor de datepicker con datpipe
-    let harvestQuality = this.productQualitySelected.descripcion;
-    let tons = this.cultureForm.get('ton_producidas').value;
-
-    // Armar objeto cosecha y añadir al array
-    this.dataSource.push(
-      (this.harvest = {
-        date: harvestDate,
-        quality: harvestQuality,
-        tons: tons,
-      })
-    );
-    // Refrescar datos de la tabla.
-    this.dataSource = [...this.dataSource];
   }
 
   // Destrucción de componente.
@@ -351,64 +307,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Obtener calidad del producto
-  onGetProductQuality(): void {
-    this.showLoadingProductQuality = true;
-
-    this.subscription.add(
-      // Obtener petición realizada por el servicio
-      this.productService
-        .getProductQuality()
-        .subscribe((res: ProducQualityResponse) => {
-          if (res) {
-            if (res.status == 'success') {
-              this.productQuality = res.productQuality;
-
-              this.showLoadingProductQuality = false;
-            } else {
-              // Mostrar notificación
-              this.toastr.error(res.msg, res.title, {
-                timeOut: 7000,
-                progressBar: true,
-              });
-              this.showLoadingProductQuality = false;
-            }
-          }
-        })
-    );
-  }
-
-  // Obtener tipos cultivos
-  onGetCropType(): void {
-    this.showLoadingCropTypes = true;
-
-    this.subscription.add(
-      // Obtener petición realizada por el servicio
-      this.cropService.getCropType().subscribe((res: CropTypeResponse) => {
-        if (res) {
-          if (res.status == 'success') {
-            this.cropTypes = res.cropType;
-
-            this.showLoadingCropTypes = false;
-          } else {
-            // Mostrar notificación
-            this.toastr.error(res.msg, res.title, {
-              timeOut: 7000,
-              progressBar: true,
-            });
-            this.showLoadingCropTypes = false;
-          }
-        }
-      })
-    );
-  }
-  // Cargar edad del cultivo
-  onGetCropAge(): void {
-    for (let i = 1; i <= 50; i++) {
-      this.cropAge.push(i);
-    }
-  }
-
   // Método para validar errores y retornar el mensaje con el mismo
   getErrorMessage(field: string): string {
     let message = '';
@@ -428,15 +326,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Eliminar cosecha del array
-  rmHarvest(index: number): void {
-    // Remover del array
-    this.dataSource.splice(index, 1);
-
-    // Refrescar datos de la tabla.
-    this.dataSource = [...this.dataSource];
-  }
-
   // Guardar datos del cultivo
   onSaveCrop(): void {
     // Activar spinner de carga.
@@ -448,15 +337,6 @@ export class CreateCropDialogComponent implements OnInit, OnDestroy {
     formValue = {
       predio_id: formValue.predio_id,
       producto_id: formValue.producto_id['producto_id'],
-      calidad_producto_id: formValue.calidad_producto_id,
-      area_produccion: formValue.area_produccion,
-      area_desarrollo: formValue.area_desarrollo,
-      ton_hectarea: formValue.ton_hectarea,
-      venta_estimada: formValue.venta_estimada,
-      edad_cultivo: formValue.edad_cultivo,
-      tipo_cultivo_id: formValue.tipo_cultivo_id,
-      peso_ultima_cosecha: formValue.peso_ultima_cosecha,
-      predio_exportador: formValue.predio_exportador,
       created_by: localStorage.getItem('username'),
       cosecha: this.dataSource,
     };
