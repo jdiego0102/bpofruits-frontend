@@ -20,6 +20,10 @@ export class CropService {
 
   // Obtener el usuario id
   user_id: number = Number(localStorage.getItem('user_id'));
+  // Obtener nombre de usuario
+  username: {} = { username: localStorage.getItem('username') };
+
+  cropArray: string[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -53,7 +57,6 @@ export class CropService {
 
   // Realizar petición al servidor para guardar almacenar lote del cultivo
   saveBatch(lot: Lot): Observable<LotResponse | void> {
-    console.log(lot);
     return this.http
       .post<LotResponse>(`${environment.API_URL}lot/create`, lot, {
         headers: this.headers,
@@ -73,6 +76,23 @@ export class CropService {
       .get<CropResponse>(
         `${environment.API_URL}culture/list/${this.user_id}`,
         {}
+      )
+      .pipe(
+        map((res: CropResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Consultar cultivo por usuario
+  deleteCrop(cropId: number): Observable<CropResponse | void> {
+    return this.http
+      .post<CropResponse>(
+        `${environment.API_URL}crop/delete/${cropId}`,
+        this.username,
+        { headers: this.headers }
       )
       .pipe(
         map((res: CropResponse) => {

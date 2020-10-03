@@ -13,6 +13,8 @@ import {
   trigger,
 } from '@angular/animations';
 import { CreateLotDialogComponent } from 'src/app/shared/components/create-lot-dialog/create-lot-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogModel } from 'src/app/models/confirmDialog.interface';
 
 @Component({
   selector: 'app-culture',
@@ -40,6 +42,7 @@ export class CultureComponent implements OnInit, OnDestroy {
   // Array cultivo
   CROP_DATA: ShowCrops[] = [];
   dataSource = this.CROP_DATA;
+  // Controlar columna al abrir detalle del cultivo para ver lotes.
   expandedElement: ShowCrops | null;
 
   constructor(
@@ -57,10 +60,10 @@ export class CultureComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
+  // Abrir diálogo crear cultivo
   openDialogCreateCrop(): void {
     const dialog = this.dialog.open(CreateCropDialogComponent);
-
+    // Recibir respuesta al evento de cerrar diálogo
     dialog.afterClosed().subscribe((cropDialog) => {
       if (cropDialog == true || cropDialog == undefined) {
         this.onGetPredio();
@@ -68,13 +71,14 @@ export class CultureComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Abrir diálogo para crear lote y pasar parámetros del cultivo
   openDialogCreateLot(cropItem: ShowCrops): void {
     const dialog = this.dialog.open(CreateLotDialogComponent, {
       data: {
         crop: cropItem,
       },
     });
-
+    // Recibir respuesta al evento de cerrar diálogo
     dialog.afterClosed().subscribe((cropDialog) => {
       if (cropDialog == true || cropDialog == undefined) {
         this.onGetPredio();
@@ -106,5 +110,49 @@ export class CultureComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  // Eliminar cultivo por Id
+  removeCrop(cropItem: ShowCrops): void {
+    const message = `¿Estás seguro? Esta acción eliminará todo lo relacionado al cultivo...`;
+    // Crear objeto para enviar al diálogo
+    const dialogData = new ConfirmDialogModel(
+      `Eliminar Cultivo de ${cropItem.producto}`,
+      message
+    );
+
+    const dialog = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '600px',
+      data: dialogData,
+    });
+
+    // Recibir respuesta al evento de cerrar diálogo
+    dialog.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult == true) {
+        // Obtener petición realizada por el servicio
+        this.cropService
+          .deleteCrop(cropItem.cultivo_id)
+          .subscribe((res: CropResponse) => {
+            if (res) {
+              if (res.status == 'success') {
+                // Mostrar notificación
+                this.toastr.success(res.msg, res.title, {
+                  timeOut: 7000,
+                  progressBar: true,
+                });
+                // Refrescar datos de la tabla.
+                this.onGetPredio();
+              } else {
+                // Mostrar notificación
+                this.toastr.error(res.msg, res.title, {
+                  timeOut: 7000,
+                  progressBar: true,
+                });
+                this.showProgressBar = false;
+              }
+            }
+          });
+      }
+    });
   }
 }

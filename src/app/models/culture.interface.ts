@@ -19,13 +19,10 @@ export interface Culture {
 }
 
 export interface ShowCrops {
+  cultivo_id?: number;
   predio_id: string;
-  // calidad_producto: string;
-  producto_id: string;
+  producto?: string;
   variedad: string;
-  // tipo_cultivo: string;
-  // edad_cultivo: number;
-  // cosechas: Harvest[];
 }
 
 export interface CropResponse {

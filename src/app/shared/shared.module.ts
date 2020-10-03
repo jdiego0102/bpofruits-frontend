@@ -7,6 +7,7 @@ import { MatModule } from '../mat/mat.module';
 
 import { RouterModule } from '@angular/router';
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { MenuListItemComponent } from './components/menu-list-item/menu-list-ite
     FooterComponent,
     SidebarComponent,
     MenuListItemComponent,
+    ConfirmDialogComponent,
   ],
   imports: [CommonModule, RouterModule, MatModule],
   exports: [HeaderComponent, FooterComponent, SidebarComponent],
