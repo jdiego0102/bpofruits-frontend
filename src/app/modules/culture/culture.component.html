@@ -15,51 +15,61 @@
   <div class="spacer" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center center">
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" fxFlex>
 
-      <!-- <ng-container matColumnDef="index">
-        <th mat-header-cell *matHeaderCellDef>N°</th>
-        <td mat-cell *matCellDef="let element; let i = index">{{ i }}</td>
-      </ng-container> -->
-
-      <ng-container matColumnDef="predio">
+      <ng-container matColumnDef="Predio">
         <th mat-header-cell *matHeaderCellDef>Predio</th>
-        <td mat-cell *matCellDef="let element">{{ element.predio }}</td>
+        <td mat-cell *matCellDef="let crop">{{ crop.predio }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="productQuality">
-        <th mat-header-cell *matHeaderCellDef>Calidad</th>
-        <td mat-cell *matCellDef="let element">{{ element.calidad_producto }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="product">
+      <ng-container matColumnDef="Producto">
         <th mat-header-cell *matHeaderCellDef>Producto</th>
-        <td mat-cell *matCellDef="let element">{{ element.producto }} ({{ element.variedad }} )</td>
+        <td mat-cell *matCellDef="let crop">{{ crop.producto }} ({{
+          crop.variedad }} )</td>
       </ng-container>
 
-      <ng-container matColumnDef="cropType">
-        <th mat-header-cell *matHeaderCellDef>Tipo cultivo</th>
-        <td mat-cell *matCellDef="let element">{{ element.tipo_cultivo }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="cropAge">
-        <th mat-header-cell *matHeaderCellDef>Edad</th>
-        <td mat-cell *matCellDef="let element">{{ element.edad_cultivo }}</td>
-      </ng-container>
-
-      <!-- <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="Acciones">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let element">
-          <button (click)="rmHarvest(dataSource.indexOf(element))" type="button" class="remove-harvest-btn" mat-mini-fab
-            aria-label="Eliminar">
+        <td mat-cell *matCellDef="let crop">
+          <button type="button" class="remove-btn" mat-mini-fab aria-label="Eliminar">
             <mat-icon>delete_forever</mat-icon>
+          </button>
+
+          <button type="button" class="remove-harvest-btn" mat-mini-fab aria-label="Adicionar Lote"
+            (click)="openDialogCreateLot(crop)">
+            <mat-icon>add</mat-icon>
           </button>
         </td>
       </ng-container>
- -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
 
+      <!-- Columna de contenido expandido: la fila de detalles se compone de esta única columna que abarca todas las columnas. -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let crop" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail" [@detailExpand]="crop == expandedElement ? 'expanded' :
+            'collapsed'">
+
+            <div *ngIf="crop.lote.length> 0">
+              <mat-list>
+                <div mat-subheader>Lotes</div>
+                <mat-list-item *ngFor="let lot of crop.lote">
+                  <mat-icon mat-list-icon>waves</mat-icon>
+                  <div mat-line>{{ lot.calidad_producto }}</div>
+                  <div mat-line> {{ lot.tipo_cultivo }} </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="element-row"
+        [class.expanded-row]="expandedElement === element"
+        (click)="expandedElement= expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+
+    </table>
   </div>
+  <!-- </div> -->
   <div class="spacer spacer-bt" *ngIf="dataSource.length === 0" fxLayoutAlign="center center">
     No se encontraron cultivos.
   </div>

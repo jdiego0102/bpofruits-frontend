@@ -7,6 +7,7 @@ import {
   CropTypeResponse,
   Culture,
 } from 'src/app/models/culture.interface';
+import { Lot, LotResponse } from 'src/app/models/lot.interface';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -43,6 +44,22 @@ export class CropService {
       })
       .pipe(
         map((res: CropResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Realizar petición al servidor para guardar almacenar lote del cultivo
+  saveBatch(lot: Lot): Observable<LotResponse | void> {
+    console.log(lot);
+    return this.http
+      .post<LotResponse>(`${environment.API_URL}lot/create`, lot, {
+        headers: this.headers,
+      })
+      .pipe(
+        map((res: LotResponse) => {
           return res;
         }),
         // Capturar error

@@ -9,7 +9,12 @@ import { RouterModule } from '@angular/router';
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, SidebarComponent, MenuListItemComponent],
+  declarations: [
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    MenuListItemComponent,
+  ],
   imports: [CommonModule, RouterModule, MatModule],
   exports: [HeaderComponent, FooterComponent, SidebarComponent],
 })

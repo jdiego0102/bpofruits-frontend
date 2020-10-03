@@ -1,3 +1,4 @@
+// import { Lot } from '../models/lot.interface';
 // Datos de cosecha.
 export interface Harvest {
   date: string;
@@ -27,13 +28,13 @@ export interface Culture {
 }
 
 export interface ShowCrops {
-  predio: string;
-  calidad_producto: string;
-  producto: string;
+  predio_id: string;
+  // calidad_producto: string;
+  producto_id: string;
   variedad: string;
-  tipo_cultivo: string;
-  edad_cultivo: number;
-  cosechas: Harvest[];
+  // tipo_cultivo: string;
+  // edad_cultivo: number;
+  // cosechas: Harvest[];
 }
 
 export interface CropResponse {
