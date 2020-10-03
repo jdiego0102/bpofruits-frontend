@@ -38,7 +38,13 @@ export class CultureComponent implements OnInit, OnDestroy {
   showProgressBar = false;
 
   // Columnas datatable cultivo
-  displayedColumns: string[] = ['Predio', 'Producto', 'Acciones'];
+  displayedColumns: string[] = [
+    'Predio',
+    'Producto',
+    'Lotes',
+    'Información Técnica',
+    'Acciones',
+  ];
   // Array cultivo
   CROP_DATA: ShowCrops[] = [];
   dataSource = this.CROP_DATA;
@@ -52,7 +58,7 @@ export class CultureComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.onGetPredio();
+    this.onGetCrop();
   }
 
   // Destrucción de componente.
@@ -66,7 +72,7 @@ export class CultureComponent implements OnInit, OnDestroy {
     // Recibir respuesta al evento de cerrar diálogo
     dialog.afterClosed().subscribe((cropDialog) => {
       if (cropDialog == true || cropDialog == undefined) {
-        this.onGetPredio();
+        this.onGetCrop();
       }
     });
   }
@@ -81,13 +87,13 @@ export class CultureComponent implements OnInit, OnDestroy {
     // Recibir respuesta al evento de cerrar diálogo
     dialog.afterClosed().subscribe((cropDialog) => {
       if (cropDialog == true || cropDialog == undefined) {
-        this.onGetPredio();
+        this.onGetCrop();
       }
     });
   }
 
   // Obtener datos del predio por usuario
-  onGetPredio(): void {
+  onGetCrop(): void {
     this.showProgressBar = true;
     this.subscription.add(
       // Obtener petición realizada por el servicio
@@ -141,7 +147,7 @@ export class CultureComponent implements OnInit, OnDestroy {
                   progressBar: true,
                 });
                 // Refrescar datos de la tabla.
-                this.onGetPredio();
+                this.onGetCrop();
               } else {
                 // Mostrar notificación
                 this.toastr.error(res.msg, res.title, {

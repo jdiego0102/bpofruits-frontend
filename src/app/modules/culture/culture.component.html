@@ -26,15 +26,34 @@
           crop.variedad }} )</td>
       </ng-container>
 
+      <ng-container matColumnDef="Lotes">
+        <th mat-header-cell *matHeaderCellDef>Lotes</th>
+        <td mat-cell *matCellDef="let crop">
+          <mat-icon matBadge="{{ crop.lote.length }}" matBadgeColor="warn">waves</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Información Técnica">
+        <th mat-header-cell *matHeaderCellDef>Información Técnica</th>
+        <td mat-cell *matCellDef="let crop">
+          <button *ngIf="crop.datos_cultivo.length> 0" mat-icon-button aria-label="Información Técnica">
+            <mat-icon>assignment</mat-icon>
+          </button>
+
+          <button *ngIf="crop.datos_cultivo.length == 0" mat-button color="primary">Agregar</button>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="Acciones">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let crop">
-          <button type="button" class="remove-btn" mat-mini-fab aria-label="Eliminar" (click)="removeCrop(crop)">
+          <button type="button" matTooltip="Eliminar Cultivo" matTooltipPosition="left" class="remove-btn" mat-mini-fab
+            aria-label="Eliminar" (click)="removeCrop(crop)">
             <mat-icon>delete_forever</mat-icon>
           </button>
 
-          <button type="button" class="remove-harvest-btn" mat-mini-fab aria-label="Adicionar Lote"
-            (click)="openDialogCreateLot(crop)">
+          <button type="button" matTooltip="Agregar Lote" matTooltipPosition="above" class="remove-harvest-btn"
+            mat-mini-fab aria-label="Adicionar Lote" (click)="openDialogCreateLot(crop)">
             <mat-icon>add</mat-icon>
           </button>
         </td>
