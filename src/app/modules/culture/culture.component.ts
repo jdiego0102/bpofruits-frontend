@@ -15,6 +15,7 @@ import {
 import { CreateLotDialogComponent } from 'src/app/shared/components/create-lot-dialog/create-lot-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModel } from 'src/app/models/confirmDialog.interface';
+import { CreateInfoTecDialogComponent } from 'src/app/shared/components/create-info-tec-dialog/create-info-tec-dialog.component';
 
 @Component({
   selector: 'app-culture',
@@ -158,6 +159,21 @@ export class CultureComponent implements OnInit, OnDestroy {
               }
             }
           });
+      }
+    });
+  }
+
+  // Abrir diálogo para crear información del cultivo
+  openDialogInfoTec(cropItem: ShowCrops): void {
+    const dialog = this.dialog.open(CreateInfoTecDialogComponent, {
+      data: {
+        crop: cropItem,
+      },
+    });
+    // Recibir respuesta al evento de cerrar diálogo
+    dialog.afterClosed().subscribe((cropDialog) => {
+      if (cropDialog == true || cropDialog == undefined) {
+        this.onGetCrop();
       }
     });
   }

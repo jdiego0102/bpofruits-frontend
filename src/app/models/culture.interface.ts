@@ -1,4 +1,7 @@
 // import { Lot } from '../models/lot.interface';
+
+import { Pesticide } from './pesticide.interface';
+
 // Datos de cosecha.
 export interface Harvest {
   date: string;
@@ -38,4 +41,33 @@ export interface CropTypeResponse {
   title?: string;
   msg?: string;
   cropType?: CropType[];
+}
+
+// Datos cultivo
+export interface CultivationData {
+  datos_cultivo_id?: number;
+  fecha: string;
+  cultivo_id?: number;
+  materia_seca?: number;
+  asesoria_agronomo: string;
+  empresa_abonos: string;
+  observacion_emp_abono: string;
+  agricultor_organico: string;
+  razon_agricultor_org: string;
+  fecha_podas: string;
+  centro_acopio: string;
+  senhaletica: string;
+  produce_insumos: string;
+  insumos_cuales: string;
+  agua: string;
+  created_by?: string;
+  color?: number;
+  pesticide?: Pesticide[];
+}
+// Respuesta datos cultivo
+export interface CultivationDataResponse {
+  status: string;
+  title?: string;
+  msg?: string;
+  cultivationData?: CultivationData[];
 }

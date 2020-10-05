@@ -40,7 +40,8 @@
             <mat-icon>assignment</mat-icon>
           </button>
 
-          <button *ngIf="crop.datos_cultivo.length == 0" mat-button color="primary">Agregar</button>
+          <button *ngIf="crop.datos_cultivo.length == 0" mat-button color="primary"
+            (click)="openDialogInfoTec(crop)">Agregar</button>
         </td>
       </ng-container>
 

@@ -121,7 +121,7 @@ export class CreateLotDialogComponent implements OnInit {
   dataSource = this.HARVEST_DATA;
 
   harvest: Harvest = null;
-  // Array del cultivo que viene de la tablar
+  // Array del cultivo que viene de la tabla
   arrayCrop: ShowCrops;
 
   @Input() templateRef: TemplateRef<any>;

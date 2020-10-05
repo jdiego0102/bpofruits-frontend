@@ -5,9 +5,14 @@ import { catchError, map } from 'rxjs/operators';
 import {
   CropResponse,
   CropTypeResponse,
+  CultivationData,
   Culture,
 } from 'src/app/models/culture.interface';
 import { Lot, LotResponse } from 'src/app/models/lot.interface';
+import {
+  PesticideResponse,
+  PesticideTypeResponse,
+} from 'src/app/models/pesticide.interface';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -96,6 +101,59 @@ export class CropService {
       )
       .pipe(
         map((res: CropResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Obtener tipos de plaguicidas
+  getPesticideType(): Observable<PesticideTypeResponse | void> {
+    return this.http
+      .get<PesticideTypeResponse>(
+        `${environment.API_URL}pesticideType/list`,
+        {}
+      )
+      .pipe(
+        map((res: PesticideTypeResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Obtener plaguicidas por tipo de plaguicida
+  getPesticides(pesticideTypeId: number): Observable<PesticideResponse | void> {
+    return this.http
+      .get<PesticideResponse>(
+        `${environment.API_URL}pesticide/list/${pesticideTypeId}`,
+        {}
+      )
+      .pipe(
+        map((res: PesticideResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Realizar petición al servidor para guardar almacenar lote del cultivo
+  saveInfoTec(
+    cultivationDate: CultivationData
+  ): Observable<LotResponse | void> {
+    return this.http
+      .post<LotResponse>(
+        `${environment.API_URL}cultivationData/create`,
+        cultivationDate,
+        {
+          headers: this.headers,
+        }
+      )
+      .pipe(
+        map((res: LotResponse) => {
           return res;
         }),
         // Capturar error
