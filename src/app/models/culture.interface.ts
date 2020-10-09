@@ -71,3 +71,9 @@ export interface CultivationDataResponse {
   msg?: string;
   cultivationData?: CultivationData[];
 }
+
+export interface ShowDataTableCrop {
+  def: string;
+  label: string;
+  hide: boolean;
+}

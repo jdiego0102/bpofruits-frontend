@@ -4,6 +4,11 @@
   <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
     <div class="aligned-with-icon">
       <mat-icon>local_florist</mat-icon><span> Cultivos</span>
+      <div class="input-search">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar...">
+        </mat-form-field>
+      </div>
     </div>
 
     <button mat-raised-button color="primary" class="aligned-with-icon-button" (click)="openDialogCreateCrop()">
@@ -36,8 +41,8 @@
       <ng-container matColumnDef="Información Técnica">
         <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Información Técnica</th>
         <td class="center-mat-cell" mat-cell *matCellDef="let crop">
-          <button *ngIf="crop.datos_cultivo.length> 0" matTooltip="Ver" matTooltipPosition="right" mat-icon-button
-            aria-label="Información Técnica" (click)="openDialogInfoTecEdit(crop)">
+          <button *ngIf="crop.datos_cultivo.length> 0" mat-icon-button aria-label="Información Técnica"
+            (click)="openDialogInfoTecEdit(crop)">
             <mat-icon>assignment</mat-icon>
           </button>
 
@@ -89,14 +94,21 @@
       <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 
     </table>
+
+
   </div>
+  <mat-paginator class="spacer" *ngIf="isAdmin == 1" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+  </mat-paginator>
   <!-- </div> -->
-  <div class="spacer spacer-bt" *ngIf="dataSource.length === 0" fxLayoutAlign="center center">
-    No se encontraron cultivos.
-  </div>
+
+
   <div *ngIf="showProgressBar">
     <mat-progress-bar class="spacer" mode="indeterminate"></mat-progress-bar>
   </div>
+
+  <!--  <div class="spacer spacer-bt" *ngIf="dataSource" fxLayoutAlign="center center">
+    No se encontraron cultivos.
+  </div> -->
 
 
 </mat-card>

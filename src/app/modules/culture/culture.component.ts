@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,9 @@ import { CreateLotDialogComponent } from 'src/app/shared/components/create-lot-d
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModel } from 'src/app/models/confirmDialog.interface';
 import { CreateInfoTecDialogComponent } from 'src/app/shared/components/create-info-tec-dialog/create-info-tec-dialog.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-culture',
@@ -39,27 +42,48 @@ export class CultureComponent implements OnInit, OnDestroy {
   showProgressBar = false;
 
   // Columnas datatable cultivo
-  displayedColumns: string[] = [
-    'Predio',
-    'Producto',
-    'Lotes',
-    'Información Técnica',
-    'Acciones',
-  ];
+  displayedColumns: string[] = [];
   // Array cultivo
   CROP_DATA: ShowCrops[] = [];
-  dataSource = this.CROP_DATA;
+  // dataSource = new MatTableDataSource<ShowCrops>(this.CROP_DATA);
   // Controlar columna al abrir detalle del cultivo para ver lotes.
   expandedElement: ShowCrops | null;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource: MatTableDataSource<ShowCrops>;
+
+  isAdmin = null;
 
   constructor(
     private dialog: MatDialog,
     private cropService: CropService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private authService: AuthService
+  ) {
+    this.authService.isAdmin$.subscribe((res) => (this.isAdmin = res));
+
+    this.onGetCrop();
+
+    this.dataSource = new MatTableDataSource(this.CROP_DATA);
+    this.ngAfterViewInit();
+  }
 
   ngOnInit(): void {
-    this.onGetCrop();
+    if (this.isAdmin == 1) {
+      this.displayedColumns = [
+        'Predio',
+        'Producto',
+        'Lotes',
+        'Información Técnica',
+        'Acciones',
+      ];
+    } else {
+      this.displayedColumns = ['Predio', 'Producto', 'Lotes', 'Acciones'];
+    }
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   // Destrucción de componente.
@@ -67,6 +91,14 @@ export class CultureComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+  // Filtrar cultivos en el buscador
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remover espacios
+    filterValue = filterValue.toLowerCase(); // La fuente de datos tiene como valor predeterminado coincidencias en minúsculas
+    this.dataSource.filter = filterValue;
+  }
+
   // Abrir diálogo crear cultivo
   openDialogCreateCrop(): void {
     const dialog = this.dialog.open(CreateCropDialogComponent);
@@ -101,10 +133,10 @@ export class CultureComponent implements OnInit, OnDestroy {
       this.cropService.getPredio().subscribe((res: CropResponse) => {
         if (res) {
           if (res.status == 'success') {
-            this.dataSource = res.crops;
+            this.dataSource = new MatTableDataSource(res.crops);
+            this.ngAfterViewInit();
             // Refrescar datos de la tabla.
-            this.dataSource = [...this.dataSource];
-            console.log(res);
+            // this.dataSource = [...this.dataSource];
             this.showProgressBar = false;
           } else {
             // Mostrar notificación

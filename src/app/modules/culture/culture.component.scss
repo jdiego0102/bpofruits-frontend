@@ -78,3 +78,10 @@ tr.element-row:not(.expanded-row):active {
   text-align: center;
   justify-content: center;
 }
+
+.input-search {
+  margin-left: 10px;
+  min-height: 64px;
+  padding: 8px 24px 0;
+  font-size: 18px;
+}

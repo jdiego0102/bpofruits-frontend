@@ -10,6 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +24,19 @@ export class PredioService {
   longitude: number = undefined;
   latitude: number = undefined;
 
-  constructor(private http: HttpClient, private router: Router) {
+  // Controlar rol administrador
+  isAdmin = 2;
+  // Actor o administrador
+  user_actor: number = 2;
+
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.getPosition();
+    // Obtener valor del tipo de actor
+    this.authService.isAdmin$.subscribe((res) => (this.isAdmin = res));
+    // Validar si el tipo actor es administrador para traer datos de admin
+    this.isAdmin == 1
+      ? (this.user_actor = 0)
+      : (this.user_actor = this.user_id);
   }
 
   // Solicitar permisos de ubciación, obtener latitud y longitud
@@ -47,7 +59,7 @@ export class PredioService {
   getPredio(): Observable<PredioResponse | void> {
     return this.http
       .get<PredioResponse>(
-        `${environment.API_URL}getPredio/${this.user_id}`,
+        `${environment.API_URL}getPredio/${this.user_actor}`,
         {}
       )
       .pipe(
@@ -64,7 +76,7 @@ export class PredioService {
   getStates(): Observable<PredioResponse | void> {
     return this.http
       .get<PredioResponse>(
-        `${environment.API_URL}getStates/${this.user_id}`,
+        `${environment.API_URL}getStates/${this.user_actor}`,
         {}
       )
       .pipe(

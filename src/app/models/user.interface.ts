@@ -5,6 +5,7 @@ export interface User {
   email: string;
   password: string;
   confirmPassword: string;
+  tipo_actor_id?: Roles;
 }
 
 export interface UserResponse {
@@ -17,3 +18,5 @@ export interface UserResponse {
   user: [];
   menu?: MenuItem[];
 }
+
+export type Roles = 2;

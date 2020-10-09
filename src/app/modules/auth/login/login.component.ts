@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     password: ['', [Validators.required, Validators.minLength(5)]],
   });
 
+  isAdmin = null;
+
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.authService.isAdmin$.subscribe((res) => (this.isAdmin = res));
     /* const userData = {
       name: 'JDCASTRO',
       password: '123456',
@@ -71,7 +74,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.authService.login(formValue).subscribe((res: UserResponse) => {
         if (res.status == 'success') {
-          console.log(res.menu['original']);
           localStorage.setItem('menu', JSON.stringify(res.menu['original']));
 
           this.router.navigate(['/admin']);

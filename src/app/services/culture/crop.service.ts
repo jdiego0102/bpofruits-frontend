@@ -14,6 +14,7 @@ import {
   PesticideTypeResponse,
 } from 'src/app/models/pesticide.interface';
 import { environment } from 'src/environments/environment.prod';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,10 +28,22 @@ export class CropService {
   user_id: number = Number(localStorage.getItem('user_id'));
   // Obtener nombre de usuario
   username: {} = { username: localStorage.getItem('username') };
-
+  // Array de cultivos con lotes y cosechas
   cropArray: string[] = [];
+  // Controlar rol administrador
+  isAdmin = 2;
+  // Actor o administrador
+  user_actor: number = 2;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+    // Obtener valor del tipo de actor
+    this.authService.isAdmin$.subscribe((res) => (this.isAdmin = res));
+
+    // Validar si el tipo actor es administrador para traer datos de admin
+    this.isAdmin == 1
+      ? (this.user_actor = 0)
+      : (this.user_actor = this.user_id);
+  }
 
   // Obtener tipos de cultivo
   getCropType(): Observable<CropTypeResponse | void> {
@@ -79,7 +92,7 @@ export class CropService {
   getPredio(): Observable<CropResponse | void> {
     return this.http
       .get<CropResponse>(
-        `${environment.API_URL}culture/list/${this.user_id}`,
+        `${environment.API_URL}culture/list/${this.user_actor}`,
         {}
       )
       .pipe(
