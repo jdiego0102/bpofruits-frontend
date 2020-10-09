@@ -182,6 +182,60 @@ export class CreateInfoTecDialogComponent implements OnInit {
             : this.pesticidesTypes.slice()
         )
       );
+
+    if (this.arrayCrop['cultivation_data'] != undefined) {
+      if (this.arrayCrop['cultivation_data'].length > 0) {
+        this.infoTecForm.controls['fecha'].setValue(
+          this.arrayCrop['cultivation_data'][0].fecha
+        );
+        this.infoTecForm.controls['asesoria_agronomo'].setValue(
+          this.arrayCrop['cultivation_data'][0].asesoria_agronomo
+        );
+        this.infoTecForm.controls['centro_acopio'].setValue(
+          this.arrayCrop['cultivation_data'][0].centro_acopio
+        );
+        this.infoTecForm.controls['senhaletica'].setValue(
+          this.arrayCrop['cultivation_data'][0].senhaletica
+        );
+        this.infoTecForm.controls['agua'].setValue(
+          this.arrayCrop['cultivation_data'][0].agua
+        );
+        // Validar materia_seca y color para seleccionar el radio button
+        if (this.arrayCrop['cultivation_data'][0].color != null) {
+          this.infoTecForm.controls['status'].setValue('color');
+        } else if (this.arrayCrop['cultivation_data'][0].materia_seca != null) {
+          this.infoTecForm.controls['status'].setValue('materia_seca');
+        }
+
+        this.infoTecForm.controls['materia_seca'].setValue(
+          this.arrayCrop['cultivation_data'][0].materia_seca
+        );
+        this.infoTecForm.controls['color'].setValue(
+          this.arrayCrop['cultivation_data'][0].color
+        );
+        this.infoTecForm.controls['fecha_podas'].setValue(
+          this.arrayCrop['cultivation_data'][0].fecha_podas
+        );
+        this.infoTecForm.controls['empresa_abonos'].setValue(
+          this.arrayCrop['cultivation_data'][0].empresa_abonos
+        );
+        this.infoTecForm.controls['observacion_emp_abono'].setValue(
+          this.arrayCrop['cultivation_data'][0].observacion_emp_abono
+        );
+        this.infoTecForm.controls['agricultor_organico'].setValue(
+          this.arrayCrop['cultivation_data'][0].agricultor_organico
+        );
+        this.infoTecForm.controls['razon_agricultor_org'].setValue(
+          this.arrayCrop['cultivation_data'][0].razon_agricultor_org
+        );
+        this.infoTecForm.controls['produce_insumos'].setValue(
+          this.arrayCrop['cultivation_data'][0].produce_insumos
+        );
+        this.infoTecForm.controls['insumos_cuales'].setValue(
+          this.arrayCrop['cultivation_data'][0].insumos_cuales
+        );
+      }
+    }
   }
 
   // Filtrar tipos de plaguicidas
@@ -328,17 +382,32 @@ export class CreateInfoTecDialogComponent implements OnInit {
   }
 
   onSaveInfoTec(): void {
+    let pruningDate;
     // Activar spinner de carga.
-    this.isLoading = true;
+    // this.isLoading = true;
     // Obtener valores del formulario
     let formValue: CultivationData = this.infoTecForm.value;
 
     // Obtener valores de fecha
     let date = this.infoTecForm.get('fecha').value._d;
-    let pruningDate = this.infoTecForm.get('fecha_podas').value._d;
+
+    if (date === undefined) {
+      this.infoTecForm
+        .get('fecha')
+        .setValue(this.arrayCrop['cultivation_data'][0].fecha);
+    } else {
+      this.infoTecForm
+        .get('fecha')
+        .setValue(this.datePipe.transform(date, 'yyyy-MM-dd'));
+    }
+
+    // Validar que se haya digitado fecha para asiganar el valor
+    if (this.infoTecForm.get('fecha_podas').value != null) {
+      pruningDate = this.infoTecForm.get('fecha_podas').value._d;
+    }
 
     formValue = {
-      fecha: this.datePipe.transform(date, 'yyyy-MM-dd'), // Formatear valor de datepicker con datepipe,
+      fecha: this.infoTecForm.get('fecha').value, // Formatear valor de datepicker con datepipe,
       cultivo_id: this.arrayCrop['crop'].cultivo_id,
       materia_seca: formValue.materia_seca,
       asesoria_agronomo: formValue.asesoria_agronomo,

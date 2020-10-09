@@ -71,3 +71,10 @@ tr.element-row:not(.expanded-row):active {
   margin-right: 10px;
   background-color: red;
 }
+
+.center-mat-cell {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  justify-content: center;
+}

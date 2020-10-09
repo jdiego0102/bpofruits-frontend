@@ -177,4 +177,21 @@ export class CultureComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  // Abrir diálogo para ver/actualizar información del cultivo
+  openDialogInfoTecEdit(cropItem: ShowCrops): void {
+    const dialog = this.dialog.open(CreateInfoTecDialogComponent, {
+      data: {
+        crop: cropItem,
+        cultivation_data: cropItem['datos_cultivo'],
+      },
+    });
+
+    // Recibir respuesta al evento de cerrar diálogo
+    dialog.afterClosed().subscribe((infoTecpDialog) => {
+      if (infoTecpDialog == true || infoTecpDialog == undefined) {
+        this.onGetCrop();
+      }
+    });
+  }
 }
