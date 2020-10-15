@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { CreateInfoTecDialogComponent } from './components/create-info-tec-dialog/create-info-tec-dialog.component';
+import { CreatePredioDialogComponent } from './components/create-predio-dialog/create-predio-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CreateInfoTecDialogComponent } from './components/create-info-tec-dialo
     MenuListItemComponent,
     ConfirmDialogComponent,
     CreateInfoTecDialogComponent,
+    CreatePredioDialogComponent,
   ],
   imports: [CommonModule, RouterModule, MatModule],
   exports: [HeaderComponent, FooterComponent, SidebarComponent],

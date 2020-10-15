@@ -24,6 +24,9 @@ export class PredioService {
   longitude: number = undefined;
   latitude: number = undefined;
 
+  // Obtener nombre de usuario
+  username: {} = { username: localStorage.getItem('username') };
+
   // Controlar rol administrador
   isAdmin = 2;
   // Actor o administrador
@@ -64,7 +67,6 @@ export class PredioService {
       )
       .pipe(
         map((res: PredioResponse) => {
-          console.log(res);
           return res;
         }),
         // Capturar error
@@ -110,7 +112,7 @@ export class PredioService {
       observaciones: predio.observaciones,
       created_by: localStorage.getItem('username'),
       user_id: this.user_id,
-      estado_via_acceso: predio.estado_via_acceso,
+      via_acceso_id: predio.via_acceso_id,
     };
 
     return this.http
@@ -148,6 +150,23 @@ export class PredioService {
       .get<AccessRoadsResponse>(`${environment.API_URL}accessRoads/list`, {})
       .pipe(
         map((res: AccessRoadsResponse) => {
+          return res;
+        }),
+        // Capturar error
+        catchError((err) => this.handlerError(err))
+      );
+  }
+
+  // Eliminar predio por id
+  deletePredio(predioId: number): Observable<PredioResponse | void> {
+    return this.http
+      .post<PredioResponse>(
+        `${environment.API_URL}predio/delete/${predioId}`,
+        this.username,
+        { headers: this.headers }
+      )
+      .pipe(
+        map((res: PredioResponse) => {
           return res;
         }),
         // Capturar error

@@ -1,267 +1,85 @@
 <mat-card>
 
-  <form [formGroup]="predioForm" (ngSubmit)="onSavePredio()">
 
+  <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
     <div class="aligned-with-icon">
-      <mat-icon>verified_user</mat-icon><span class="aligned-with-icon">Crear
-        predio</span>
-    </div>
-
-    <div *ngIf="showProgressBar">
-      <mat-progress-bar class="spacer" mode="indeterminate"></mat-progress-bar>
-      <span class="loadingText">Cargando...</span>
-    </div>
-
-    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Nombre predio</mat-label>
-        <input type="text" formControlName="nombre_predio" matInput placeholder="Nombre predio" required>
-        <mat-icon matSuffix>person</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('nombre_predio')">
-          {{ getErrorMessage("nombre_predio") }}
-        </mat-error>
-      </mat-form-field>
-
-      <div fxLaout="row wrap" fxLayoutGap="10px">
-        <mat-form-field appearance="fill" fxFlex>
-          <mat-label>Teléfono 1</mat-label>
-          <input type="number" formControlName="telefono1" matInput placeholder="Teléfono1" required>
-          <mat-icon matSuffix>phone</mat-icon>
-          <!-- Mostrar validación de error -->
-          <mat-error *ngIf="isValidField('telefono1')">
-            {{ getErrorMessage("telefono1") }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" fxFlex>
-          <mat-label>Teléfono 2</mat-label>
-          <input type="number" formControlName="telefono2" matInput placeholder="Teléfono2">
-          <mat-icon matSuffix>phone</mat-icon>
+      <mat-icon>verified_user</mat-icon><span> Predios</span>
+      <div class="input-search">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar...">
         </mat-form-field>
       </div>
-
     </div>
 
-    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Contacto</mat-label>
-        <input type="text" formControlName="contacto" matInput placeholder="Contacto" required>
-        <mat-icon matSuffix>contacts</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('contacto')">
-          {{ getErrorMessage("contacto") }}
-        </mat-error>
-      </mat-form-field>
+    <button mat-raised-button color="primary" class="aligned-with-icon-button" (click)="openDialogCreatePredio()">
+      <mat-icon>add</mat-icon> Crear
+    </button>
+  </div>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Tipo documento contacto</mat-label>
-        <mat-select formControlName="tipo_doc_contacto" required>
-          <mat-option *ngFor="let option of documentsTypes" [value]="option.tipo_documento_id">
-            {{ option.descripcion }}
-          </mat-option>
-        </mat-select>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('tipo_doc_contacto')">
-          {{ getErrorMessage("tipo_doc_contacto") }}
-        </mat-error>
-      </mat-form-field>
+  <div class="spacer" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center center">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" fxFlex>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>N° Documento Contacto</mat-label>
-        <input type="text" formControlName="nro_doc_contacto" matInput placeholder=" N° Documento Contacto" required>
-        <mat-icon matSuffix>portrait</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('nro_doc_contacto')">
-          {{ getErrorMessage("nro_doc_contacto") }}
-        </mat-error>
-      </mat-form-field>
+      <ng-container matColumnDef="Nombre Predio">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Nombre Predio</th>
+        <td mat-cell *matCellDef="let predio">{{ predio.nombre_predio }}</td>
+      </ng-container>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Email</mat-label>
-        <input type="email" formControlName="correo" matInput placeholder="Correo electrónico">
-        <mat-icon matSuffix>email</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('correo')">
-          {{ getErrorMessage("correo") }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+      <ng-container matColumnDef="Propietario">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Propietario</th>
+        <td mat-cell *matCellDef="let predio">{{ predio.representante_legal }} </td>
+      </ng-container>
 
-    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Propietario</mat-label>
-        <input type="text" formControlName="representante_legal" matInput placeholder="Propietario" required>
-        <mat-icon matSuffix>domain</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('representante_legal')">
-          {{ getErrorMessage("representante_legal") }}
-        </mat-error>
-      </mat-form-field>
+      <ng-container matColumnDef="N° Documento">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>N° Documento</th>
+        <td mat-cell *matCellDef="let predio">
+          {{ predio.nro_doc_propietario == null ? 'Pendiente' : predio.nro_doc_propietario }}
+        </td>
+      </ng-container>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Tipo documento propietario</mat-label>
-        <mat-select formControlName="tipo_doc_propietario" required>
-          <mat-option *ngFor="let option of documentsTypes" [value]="option.tipo_documento_id">
-            {{ option.descripcion }}
-          </mat-option>
-        </mat-select>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('tipo_doc_propietario')">
-          {{ getErrorMessage("tipo_doc_propietario") }}
-        </mat-error>
-      </mat-form-field>
+      <ng-container matColumnDef="Departamento">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Departamento</th>
+        <td mat-cell *matCellDef="let predio">{{ predio.nombre_departamento }}</td>
+      </ng-container>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>N° Documento Propietario</mat-label>
-        <input type="text" formControlName="nro_doc_propietario" matInput placeholder="N° Documento Propietario"
-          required>
-        <mat-icon matSuffix>portrait</mat-icon>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('nro_doc_propietario')">
-          {{ getErrorMessage("nro_doc_propietario") }}
-        </mat-error>
-      </mat-form-field>
+      <ng-container matColumnDef="Ciudad">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Ciudad</th>
+        <td mat-cell *matCellDef="let predio">{{ predio.nombre_ciudad }}</td>
+      </ng-container>
 
-    </div>
+      <ng-container matColumnDef="Vereda">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Vereda</th>
+        <td mat-cell *matCellDef="let predio">{{ predio.nombre_vereda }}</td>
+      </ng-container>
 
-    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Cuenta bancaria</mat-label>
-        <mat-select formControlName="cuenta" required>
-          <mat-option [value]="'s'"> Si </mat-option>
-          <mat-option [value]="'n'"> No </mat-option>
-        </mat-select>
-        <!-- <mat-icon matSuffix>account_balance</mat-icon> -->
-        <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('cuenta')">
-          {{ getErrorMessage("cuenta") }}
-        </mat-error> -->
-      </mat-form-field>
+      <ng-container matColumnDef="Acciones">
+        <th class="center-mat-cell" mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td class="center-mat-cell" mat-cell *matCellDef="let predio">
+          <button type="button" matTooltip="Ver Predio" matTooltipPosition="above" mat-mini-fab aria-label="Ver predio"
+            (click)="openDialogShowPredio(predio)">
+            <mat-icon>visibility</mat-icon>
+          </button>
 
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>RUT</mat-label>
-        <mat-select formControlName="rut" required>
-          <mat-option [value]="'s'"> Si </mat-option>
-          <mat-option [value]="'n'"> No </mat-option>
-        </mat-select>
-        <!-- <mat-icon matSuffix>assignment</mat-icon> -->
-        <!-- Mostrar validación de error -->
-        <!-- <mat-error *ngIf="isValidField('rut')">
-          {{ getErrorMessage("rut") }}
-        </mat-error> -->
-      </mat-form-field>
+          <button type="button" matTooltip="Eliminar Predio" matTooltipPosition="left" class="remove-btn" mat-mini-fab
+            aria-label="Eliminar" (click)="removePredio(predio)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
 
-    </div>
+        </td>
+      </ng-container>
 
 
-    <div class="aligned-with-icon spacer">
-      <mat-icon>location_on</mat-icon><span class="aligned-with-icon">Ubicación</span>
-    </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-    <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="department" #department="matAutocomplete"-->
-    <div class="spacer" fxLayout="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
-      <mat-form-field class="example-full-width" appearance="fill" fxFlex>
-        <mat-label>Departamento</mat-label>
-        <input type="text" placeholder="Departamento" formControlName="departamento_id" aria-label="Number" matInput
-          [matAutocomplete]="department" required>
+    </table>
+  </div>
 
-        <mat-autocomplete autoActiveFirstOption #department="matAutocomplete" [displayWith]="diplayDp">
-          <mat-option *ngFor="let option of filteredDepartments | async" [value]="option">
-            {{ option.nombre_departamento }}
-          </mat-option>
-        </mat-autocomplete>
+  <mat-paginator class="spacer" *ngIf="isAdmin == 1" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+  </mat-paginator>
 
-        <mat-progress-spinner *ngIf="showLoadingDepartment" matSuffix mode="indeterminate" value="100" diameter="20">
-        </mat-progress-spinner>
-
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('departamento_id')">
-          {{ getErrorMessage("departamento_id") }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="city" #city="matAutocomplete"-->
-      <mat-form-field class="example-full-width" appearance="fill" fxFlex>
-        <mat-label>Ciudad</mat-label>
-        <input type="text" formControlName="ciudad_id" placeholder="Ciudad" aria-label="Number" matInput
-          [matAutocomplete]="city" required>
-        <mat-autocomplete autoActiveFirstOption #city="matAutocomplete" [displayWith]="diplayCit">
-          <mat-option *ngFor="let cityOption of filteredCities | async" [value]="cityOption">
-            {{ cityOption.nombre_ciudad }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-progress-spinner *ngIf="showLoadingCity" matSuffix mode="indeterminate" value="100" diameter="20">
-        </mat-progress-spinner>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('ciudad_id')">
-          {{ getErrorMessage("ciudad_id") }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- LAS ENTRADAS DEBEN TENER NOMBRE DIFERENTE EJ: [matAutocomplete]="city" #city="matAutocomplete"-->
-      <mat-form-field class="example-full-width" appearance="fill" fxFlex>
-        <mat-label>Vereda</mat-label>
-        <input type="text" formControlName="vereda_id" placeholder="Vereda" aria-label="Number" matInput
-          [matAutocomplete]="sidewalk" required>
-        <mat-autocomplete autoActiveFirstOption #sidewalk="matAutocomplete" [displayWith]="diplaySid">
-          <mat-option *ngFor="let sidewalkOption of filteredSidewalks | async" [value]="sidewalkOption">
-            {{ sidewalkOption.nombre_vereda }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-progress-spinner *ngIf="showLoadingSideWalk" matSuffix mode="indeterminate" value="100" diameter="20">
-        </mat-progress-spinner>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('vereda_id')">
-          {{ getErrorMessage("vereda_id") }}
-        </mat-error>
-      </mat-form-field>
-
-
-    </div>
-
-    <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Estado Vía de Acceso</mat-label>
-        <mat-select formControlName="estado_via_acceso" required>
-          <mat-option *ngFor="let option of accessRoads" [value]="option.via_acceso_id">
-            {{ option.descripcion }}
-          </mat-option>
-        </mat-select>
-        <!-- Mostrar validación de error -->
-        <mat-error *ngIf="isValidField('estado_via_acceso')">
-          {{ getErrorMessage("estado_via_acceso") }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="spacer textArea" fxLayout="column">
-      <mat-form-field appearance="fill" fxFlex>
-        <mat-label>Observaciones</mat-label>
-        <textarea formControlName="observaciones" matInput></textarea>
-      </mat-form-field>
-    </div>
-
-    <div *ngIf="isUpdatingData" class="btns" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
-      fxLayoutGap.lt-md="0px">
-      <button [disabled]="predioForm.invalid || isLoading == true" type="submit" mat-raised-button color="primary"
-        class="btn-block">
-        <span *ngIf="!isLoading">Guardar y cerrar</span>
-        <div *ngIf="isLoading" fxLayout="row" fxLayoutAlign="center center" class="spinner">
-          <mat-progress-spinner mode="indeterminate" value="100" diameter="20"></mat-progress-spinner>
-        </div>
-      </button>
-
-      <button [disabled]="true" type="button" mat-stoked-button color="primary" class="btn-block">
-        <span>Crear cultivo</span>
-      </button>
-    </div>
-  </form>
-
-  <button mat-mini-fab color="warn" aria-label="Example icon button with a home
-    icon" class="custom-button" (click)="updatingData()">
-    <mat-icon>edit</mat-icon>
-  </button>
-
+  <div *ngIf="showProgressBar">
+    <mat-progress-bar class="spacer" mode="indeterminate"></mat-progress-bar>
+  </div>
 </mat-card>
-<!-- [formControl]="myControl" -->

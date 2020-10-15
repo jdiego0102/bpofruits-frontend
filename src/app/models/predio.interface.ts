@@ -18,13 +18,21 @@ export interface Predio {
   observaciones: string;
   created_by: string;
   user_id: number;
-  estado_via_acceso: number;
+  via_acceso_id: number;
+  nombre_departamento?: string;
+  nombre_ciudad?: string;
+  nombre_vereda?: string;
 }
 
 export interface States {
   predio_id?: number;
   nombre_predio: string;
   representante_legal: string;
+  nro_doc_propietario?: number;
+  telefono1?: string;
+  nombre_departamento?: string;
+  nombre_ciudad?: string;
+  nombre_vereda?: string;
 }
 
 export interface PredioResponse {
